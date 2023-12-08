@@ -12,8 +12,6 @@ For this project, the Nginx conf will be setup like so:
 
 - Make sure the URL in app.conf and init-letsencrypt.sh are correct
 - Upload the project to your remote server.
-  - Filezilla example:
-  - ![Filezilla Login Config](./screenshots/filezilla-login-config.png "Filezilla Login Config")
 - Run these commands (permission to run file, file run)
   - ```
     chmod +x init-letsencrypt.sh
