@@ -1,3 +1,15 @@
+
+Project description:
+
+For this project, the Nginx conf will be setup like so:
+
+- 1 conf file for web app: 
+  - the main conf file will pull the file containing out website nginx conf.
+- 1 conf file for each app project:
+  - the main conf file will pull one sub-conf file for each additional item, such as a web app.
+
+
+___________ Original doc _________
 # Boilerplate for nginx with Let’s Encrypt on docker-compose
 
 > This repository is accompanied by a [step-by-step guide on how to

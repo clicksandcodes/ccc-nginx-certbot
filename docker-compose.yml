@@ -3,6 +3,8 @@ version: '3'
 networks:
   docker_nginx_network:
     driver: bridge
+    # Can set the network name this way.  If not set, the directory's name becomes the prefix of the network name https://forums.docker.com/t/set-default-network-name-for-compose/36779/5
+    name: docker_nginx_network
 
 services:
   nginx:
