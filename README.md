@@ -8,6 +8,28 @@ For this project, the Nginx conf will be setup like so:
 - 1 conf file for each app project:
   - the main conf file will pull one sub-conf file for each additional item, such as a web app.
 
+### Basic steps
+
+- Make sure the URL in app.conf and init-letsencrypt.sh are correct
+- Upload the project to your remote server.
+  - Filezilla example:
+  - ![Filezilla Login Config](./screenshots/filezilla-login-config.png "Filezilla Login Config")
+- Run these commands (permission to run file, file run)
+  - ```
+    chmod +x init-letsencrypt.sh
+    sudo ./init-letsencrypt.sh
+    ```
+### Full instructions
+Full Instructions for getting this running:
+https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+
+(Also in ./backup_files/article_backup/ARTICLE.md)
+
+### Project steps
+
+Then run chmod +x init-letsencrypt.sh and sudo ./init-letsencrypt.sh.
+
+
 
 ___________ Original doc _________
 # Boilerplate for nginx with Let’s Encrypt on docker-compose
