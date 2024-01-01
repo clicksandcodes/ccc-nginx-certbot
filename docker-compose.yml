@@ -22,8 +22,6 @@ services:
     network_mode: host
     container_name: certbotContainerService
     image: certbot/certbot
-    env_file:
-      - ./.env
     # networks:
     #   - docker_nginx_network
     restart: unless-stopped
