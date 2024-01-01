@@ -40,11 +40,10 @@ Now, back outside of the container:
     # Set the env var in the Linux server:
     export NGINX_HOST=livestauction.com
     export ADMIN_EMAIL=patrick.wm.meaney@gmail.com
-    # Here we populate the .sh file with the env vars
+    # Here we populate the .sh file with the env vars.  When you run this command, you'll see the output of the file which has now been populated with the above two env vars.
     envsubst < init-letsencrypt.sh
     # Now give the current linux user permission to to execute the file
     chmod +x init-letsencrypt.sh
-    # Check that it has been po
     # Now run it.
     sudo ./init-letsencrypt.sh
     ```
