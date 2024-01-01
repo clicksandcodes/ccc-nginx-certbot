@@ -25,17 +25,13 @@ Then run the second one, then the init-letsencrypt.sh file, and check that https
 - Run this: `envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
 - exit the container
 - restart it: `docker restart nginx`
-
-Since we provided the env var of $NGINX_HOST via a .env file (via the docker-compose file's "env_file" and the .env file in the repo), the env var of $NGINX_HOST will not disappear on restart
-- Run `env` to see the env vars-- you'll see NGINX_HOST=someDomain.com
-- Check the conf file was made with: `ls /etc/nginx/conf.d` -- you should see the `a-http-json-healthcheck.conf` file
-- Check that it was populated with the domain name: `cat /etc/nginx/conf.d/a-http-json-healthcheck.conf`
-- check domain (w/o https) and you should see the json response from the nginx server block
+- check the domain (w/o https) via your browser and you should see the json response from the nginx server block
 
 ```shell
 # If you want to check how/why -- 
 # - While still in the nginx docker container:
 
+# Since we provided the env var of $NGINX_HOST via a .env file (via the docker-compose file's "env_file" and the .env file in the repo), the env var of $NGINX_HOST will not disappear on restart.
 # Check the env vars: You'll see: NGINX_HOST=someDomain.com
 # Run this:
 env

@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(${NGINX_HOST} www.${NGINX_HOST})
+domains=("${NGINX_HOST}" "www.${NGINX_HOST}")
 rsa_key_size=4096
 data_path="./data/certbot"
 email="${ADMIN_EMAIL}" # Adding a valid address is strongly recommended
@@ -54,7 +54,7 @@ echo "### Requesting Let's Encrypt certificate for $domains ..."
 #Join $domains to -d args
 domain_args=""
 for domain in "${domains[@]}"; do
-  domain_args="$domain_args -d $domain"
+  domain_args="$domain_args -d \"$domain\""
 done
 
 # Select appropriate email arg
