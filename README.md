@@ -21,15 +21,31 @@ Here's how we do it:
 - git clone the repo.
 - exec into the docker container of the nginx container: `docker exec -it nginxContainerService sh`
 - Run this: `envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
-- check domain (w/o https)
+- exit the container
+- restart it: `docker restart nginxContainerService`
+- Since we provided the env var of $NGINX_HOST via a .env file (via the docker-compose file's "env_file" and the .env file in the repo), the env var of $NGINX_HOST will not disappear on restart
+- Run `env` to see the env vars-- you'll see NGINX_HOST=someDomain.com
+- Check the conf file was made with: `ls /etc/nginx/conf.d` -- you should see the `a-http-json-healthcheck.conf` file
+- Check that it was populated with the domain name: `cat /etc/nginx/conf.d/a-http-json-healthcheck.conf`
+- check domain (w/o https) and you should see the json response from the nginx server block
 
 - While still in the nginx docker container:
 - Run this: `envsubst < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf`
+- Check the conf file was made with: `ls /etc/nginx/conf.d` -- you should see the `b-https-json-healthcheck.conf` file
+- Check that it was populated with the domain name: `cat /etc/nginx/conf.d/b-https-json-healthcheck.conf`
 
 Now, back outside of the container:
-- Run these commands (permission to run file, file run)
+- From inside the project directory, Run these commands (permission to run file, file run)
   - ```shell
+    # Set the env var in the Linux server:
+    export NGINX_HOST=livestauction.com
+    export ADMIN_EMAIL=patrick.wm.meaney@gmail.com
+    # Here we populate the .sh file with the env vars
+    envsubst < init-letsencrypt.sh
+    # Now give the current linux user permission to to execute the file
     chmod +x init-letsencrypt.sh
+    # Check that it has been po
+    # Now run it.
     sudo ./init-letsencrypt.sh
     ```
 - Check domain (w/ https)
