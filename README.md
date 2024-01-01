@@ -1,22 +1,39 @@
 
+
+Src:
+- https://github.com/wmnnd/nginx-certbot/tree/master
+- https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
 Project description:
-
-For this project, the Nginx conf will be setup like so:
-
-- 1 conf file for web app: 
-  - the main conf file will pull the file containing out website nginx conf.
-- 1 conf file for each app project:
-  - the main conf file will pull one sub-conf file for each additional item, such as a web app.
 
 ### Basic steps
 
-- Make sure the URL in app.conf and init-letsencrypt.sh are correct
-- Upload the project to your remote server.
+
+This will insert the env var for your domain name from the docker container env vars into a conf file, for both an http conf file & https conf file.
+
+The conf files will be placed into /etc/nginx/conf.d, at which is pointed the include statement within the default nginx conf.  So, the conf files will be picked up by nginx.
+
+Run the first one, check that the domain works from your browser.
+
+Then run the second one, then the init-letsencrypt.sh file, and check that https works.
+
+Here's how we do it:
+
+- git clone the repo.
+- exec into the docker container of the nginx container: `docker exec -it nginxContainerService sh`
+- Run this: `envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
+- check domain (w/o https)
+
+- While still in the nginx docker container:
+- Run this: `envsubst < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf`
+
+Now, back outside of the container:
 - Run these commands (permission to run file, file run)
-  - ```
+  - ```shell
     chmod +x init-letsencrypt.sh
     sudo ./init-letsencrypt.sh
     ```
+- Check domain (w/ https)
+
 ### Full instructions
 Full Instructions for getting this running:
 https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
@@ -25,7 +42,6 @@ https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-m
 
 ### Project steps
 
-Then run chmod +x init-letsencrypt.sh and sudo ./init-letsencrypt.sh.
 
 
 

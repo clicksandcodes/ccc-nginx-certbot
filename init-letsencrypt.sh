@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(livestauction.com www.livestauction.com)
+domains=(${NGINX_HOST} www.${NGINX_HOST})
 rsa_key_size=4096
 data_path="./data/certbot"
 email="patrick.wm.meaney@gmail.com" # Adding a valid address is strongly recommended

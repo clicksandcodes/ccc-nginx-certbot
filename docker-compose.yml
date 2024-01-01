@@ -1,29 +1,39 @@
 version: '3'
 
-networks:
-  docker_nginx_network:
-    driver: bridge
-    # Can set the network name this way.  If not set, the directory's name becomes the prefix of the network name https://forums.docker.com/t/set-default-network-name-for-compose/36779/5
-    name: docker_nginx_network
-
 services:
-  nginx:
+  nginxContainerService:
+    network_mode: host
+    container_name: nginxContainerService
+    env_file:
+      - ./.env
     networks:
       - docker_nginx_network
     image: nginx:1.15-alpine
     restart: unless-stopped
     volumes:
-      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/nginx-templates:/etc/nginx/templates
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     ports:
       - "80:80"
       - "443:443"
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-  certbot:
+    # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  certbotContainerService:
+    network_mode: host
+    container_name: certbotContainerService
     image: certbot/certbot
+    env_file:
+      - ./.env
+    networks:
+      - docker_nginx_network
     restart: unless-stopped
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+# networks:
+#   docker_nginx_network:
+#     driver: bridge
+    # Can set the network name this way.  If not set, the directory's name becomes the prefix of the network name https://forums.docker.com/t/set-default-network-name-for-compose/36779/5
+    # name: docker_nginx_network
