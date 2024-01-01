@@ -6,8 +6,8 @@ services:
     container_name: nginxContainerService
     env_file:
       - ./.env
-    networks:
-      - docker_nginx_network
+    # networks:
+    #   - docker_nginx_network
     image: nginx:1.15-alpine
     restart: unless-stopped
     volumes:
@@ -24,8 +24,8 @@ services:
     image: certbot/certbot
     env_file:
       - ./.env
-    networks:
-      - docker_nginx_network
+    # networks:
+    #   - docker_nginx_network
     restart: unless-stopped
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
