@@ -7,6 +7,10 @@ server {
 
     server_name ${NGINX_HOST} www.${NGINX_HOST};
 
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
     location / {
       default_type application/json;
       return 200 '{"api_version":"0.0.1", "status_msg":"http_is_alive", "status_code":"200"}\n';
