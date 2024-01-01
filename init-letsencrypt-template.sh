@@ -34,19 +34,19 @@ docker-compose run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:$rsa_key_size -days 1\
     -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
-    -subj '/CN=localhost'" certbotContainerService
+    -subj '/CN=localhost'" certbot
 echo
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d nginxContainerService
+docker-compose up --force-recreate -d nginx
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
 docker-compose run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/live/$domains && \
   rm -Rf /etc/letsencrypt/archive/$domains && \
-  rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbotContainerService
+  rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
 echo
 
 
@@ -73,8 +73,8 @@ docker-compose run --rm --entrypoint "\
     $domain_args \
     --rsa-key-size $rsa_key_size \
     --agree-tos \
-    --force-renewal" certbotContainerService
+    --force-renewal" certbot
 echo
 
 echo "### Reloading nginx ..."
-docker-compose exec nginxContainerService nginxContainerService -s reload
+docker-compose exec nginx nginx -s reload

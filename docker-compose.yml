@@ -1,9 +1,8 @@
 version: '3'
 
 services:
-  nginxContainerService:
+  nginx:
     network_mode: host
-    container_name: nginxContainerService
     env_file:
       - ./.env
     # networks:
@@ -18,9 +17,8 @@ services:
       - "80:80"
       - "443:443"
     # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-  certbotContainerService:
+  certbot:
     network_mode: host
-    container_name: certbotContainerService
     image: certbot/certbot
     # networks:
     #   - docker_nginx_network
