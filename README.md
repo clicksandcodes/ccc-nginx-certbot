@@ -16,38 +16,59 @@ Run the first one, check that the domain works from your browser.
 
 Then run the second one, then the init-letsencrypt.sh file, and check that https works.
 
-Here's how we do it:
+### Clone repo and start up the http endpoint
 
 - git clone the repo.
+- enter the repo folder
+- start the containers: `docker-compose up`
 - exec into the docker container of the nginx container: `docker exec -it nginxContainerService sh`
 - Run this: `envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
 - exit the container
 - restart it: `docker restart nginxContainerService`
-- Since we provided the env var of $NGINX_HOST via a .env file (via the docker-compose file's "env_file" and the .env file in the repo), the env var of $NGINX_HOST will not disappear on restart
+
+Since we provided the env var of $NGINX_HOST via a .env file (via the docker-compose file's "env_file" and the .env file in the repo), the env var of $NGINX_HOST will not disappear on restart
 - Run `env` to see the env vars-- you'll see NGINX_HOST=someDomain.com
 - Check the conf file was made with: `ls /etc/nginx/conf.d` -- you should see the `a-http-json-healthcheck.conf` file
 - Check that it was populated with the domain name: `cat /etc/nginx/conf.d/a-http-json-healthcheck.conf`
 - check domain (w/o https) and you should see the json response from the nginx server block
 
-- While still in the nginx docker container:
-- Run this: `envsubst < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf`
-- Check the conf file was made with: `ls /etc/nginx/conf.d` -- you should see the `b-https-json-healthcheck.conf` file
-- Check that it was populated with the domain name: `cat /etc/nginx/conf.d/b-https-json-healthcheck.conf`
+```shell
+# If you want to check how/why -- 
+# - While still in the nginx docker container:
 
-Now, back outside of the container:
+# Check the env vars: You'll see: NGINX_HOST=someDomain.com
+# Run this:
+env
+
+# Check the conf file was made (It is created based off the .conf.template file via the envsubst command)  -- you should see the `a-http-json-healthcheck` file
+# Run this:
+ls /etc/nginx/conf.d
+
+# Check that the conf file was populated with the domain name from the env var "NGINX_HOST"
+# Run this:
+cat /etc/nginx/conf.d/a-http-json-healthcheck
+```
+
+### Start up the https endpoint
+
+We first needed an http endpoint in order for certbot to provide us certs.
+Now that we have one, we can move on to the https endpoint.
+
+Back outside of the container:
 - From inside the project directory, Run these commands (permission to run file, file run)
   - ```shell
-    # Set the env var in the Linux server:
-    export NGINX_HOST=livestauction.com
-    export ADMIN_EMAIL=patrick.wm.meaney@gmail.com
+    # Set the env vars in the Linux server:
+    export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com
     # Here we populate the .sh file with the env vars.  When you run this command, you'll see the output of the file which has now been populated with the above two env vars.
-    envsubst < init-letsencrypt.sh
+    envsubst < init-letsencrypt-template.sh > populated-init-letsencrypt.sh
     # Now give the current linux user permission to to execute the file
-    chmod +x init-letsencrypt.sh
+    chmod +x populated-init-letsencrypt.sh
     # Now run it.
-    sudo ./init-letsencrypt.sh
+    sudo ./populated-init-letsencrypt.sh
     ```
 - Check domain (w/ https)
+
+
 
 ### Full instructions
 Full Instructions for getting this running:
