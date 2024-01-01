@@ -12,7 +12,6 @@ server {
     }
 
     location / {
-      default_type application/json;
-      return 200 '{"api_version":"0.0.1", "status_msg":"http_is_alive", "status_code":"200"}\n';
+        return 301 https://$host$request_uri;
     }
 }

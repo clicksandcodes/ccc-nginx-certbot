@@ -20,11 +20,22 @@ Then run the second one, then the init-letsencrypt.sh file, and check that https
 
 - git clone the repo.
 - enter the repo folder
+
+See the codeblock below-- this is just a summary of the steps.
 - start the containers: `docker-compose up`
 - exec into the docker container of the nginx container: `docker exec -it nginx sh`
 - Run this: `envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
 - exit the container
 - restart it: `docker restart nginx`
+
+```shell
+# Run this line by line.
+docker exec -it nginx sh
+envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf
+exit
+docker restart nginx
+```
+
 - check the domain (w/o https) via your browser and you should see the json response from the nginx server block
 
 ```shell
@@ -49,6 +60,19 @@ cat /etc/nginx/conf.d/a-http-json-healthcheck
 
 We first needed an http endpoint in order for certbot to provide us certs.
 Now that we have one, we can move on to the https endpoint.
+
+We need to first create the https conf inside the docker container.
+Run this line by line.
+
+```shell
+# Run this line by line.
+docker exec -it nginx sh
+envsubst < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf
+exit
+docker restart nginx
+```
+
+
 
 Back outside of the container:
 - From inside the project directory, Run these commands (permission to run file, file run)
