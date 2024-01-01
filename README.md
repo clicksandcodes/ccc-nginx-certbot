@@ -21,10 +21,10 @@ Then run the second one, then the init-letsencrypt.sh file, and check that https
 - git clone the repo.
 - enter the repo folder
 - start the containers: `docker-compose up`
-- exec into the docker container of the nginx container: `docker exec -it nginxContainerService sh`
+- exec into the docker container of the nginx container: `docker exec -it nginx sh`
 - Run this: `envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
 - exit the container
-- restart it: `docker restart nginxContainerService`
+- restart it: `docker restart nginx`
 
 Since we provided the env var of $NGINX_HOST via a .env file (via the docker-compose file's "env_file" and the .env file in the repo), the env var of $NGINX_HOST will not disappear on restart
 - Run `env` to see the env vars-- you'll see NGINX_HOST=someDomain.com

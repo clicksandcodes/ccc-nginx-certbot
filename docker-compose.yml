@@ -2,6 +2,7 @@ version: '3'
 
 services:
   nginx:
+    container_name: nginx
     network_mode: host
     env_file:
       - ./.env
@@ -18,6 +19,7 @@ services:
       - "443:443"
     # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   certbot:
+    container_name: certbot
     network_mode: host
     image: certbot/certbot
     # networks:
