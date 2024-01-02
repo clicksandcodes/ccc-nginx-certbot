@@ -150,3 +150,12 @@ All code in this repository is licensed under the terms of the `MIT License`. Fo
     # location / {
     #     return 301 https://$host$request_uri;
     # }
+
+
+docker-compose run --rm "\
+  certbot -vvv certonly --webroot -w /var/www/certbot \
+    0 \
+    patrick.wm.meaney@gmail.com \
+    livestauction.com www.livestauction.com \
+    --rsa-key-size $rsa_key_size \
+    --agree-tos" certbotContainerService

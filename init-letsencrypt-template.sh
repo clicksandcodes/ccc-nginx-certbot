@@ -38,7 +38,8 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up restart -d nginxContainerService
+docker restart nginxContainerService
+# Problem: this wipes the whole nginx container-- do dont use this.
 # docker-compose up --force-recreate -d nginxContainerService
 echo
 
