@@ -25,7 +25,8 @@ Then run the second one, then the init-letsencrypt.sh file, and check that https
 See the codeblock below-- this is just a summary of the steps.
 - start the containers: `docker-compose up`
 - exec into the docker container of the nginx container: `docker exec -it nginx sh`
-- Run this: `envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
+- Run this: `envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
+- (Note: the specific env var (i.e. $NGINX_HOST) is specified above because it tells Nginx envsubst to only overwrite that particular env var, whick keeps intact others such as $host and  $request_uri.  More info: https://github.com/docker-library/docs/issues/496#issuecomment-186149231)
 - exit the container
 - restart it: `docker restart nginx`
 
@@ -72,10 +73,10 @@ Run this line by line.
 ```shell
 # Run this line by line.
 docker exec -it nginx sh
-envsubst < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf
+envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf
 
 # OR run them as one line:
-docker exec -it nginx sh -c "envsubst < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf"
+docker exec -it nginx sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf"
 exit
 docker restart nginx
 ```
@@ -88,7 +89,7 @@ Back outside of the container:
     # Set the env vars in the Linux server:
     export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com
     # Here we populate the .sh file with the env vars.  When you run this command, you'll see the output of the file which has now been populated with the above two env vars.
-    envsubst < init-letsencrypt-template.sh > populated-init-letsencrypt.sh
+    envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh
     # Now give the current linux user permission to to execute the file
     chmod +x populated-init-letsencrypt.sh
     # Now run it.
