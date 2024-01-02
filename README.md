@@ -74,11 +74,11 @@ Run this line by line.
 # Run this line by line.
 docker exec -it nginx sh
 envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf
-
-# OR run them as one line:
-docker exec -it nginx sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf"
 exit
 docker restart nginx
+
+# OR run them as one line:
+docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 ```
 
 
