@@ -80,11 +80,20 @@ fi
 #     --force-renewal" certbotContainerService
 
 # This worked:
+# docker exec certbotContainerService sh -c "\
+#   certbot -vvv certonly --webroot -w /var/www/certbot \
+#     --email patrick.wm.meaney@gmail.com \
+#     -d livestauction.com -d www.livestauction.com \
+#     --rsa-key-size 4096 \
+#     --agree-tos \
+#     --force-renewal"
+
+# Now going to insert the shell env vars from above
 docker exec certbotContainerService sh -c "\
   certbot -vvv certonly --webroot -w /var/www/certbot \
-    --email patrick.wm.meaney@gmail.com \
-    -d livestauction.com -d www.livestauction.com \
-    --rsa-key-size 4096 \
+    $email_arg \
+    ${domain_args[@]} \
+    --rsa-key-size $rsa_key_size \
     --agree-tos \
     --force-renewal"
 
