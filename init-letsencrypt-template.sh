@@ -70,15 +70,23 @@ if [ "$staging" -ne 0 ]; then
   staging_arg="--staging"
 fi
 
-docker-compose run --rm --entrypoint "\
+# docker-compose run --rm --entrypoint "\
+#   certbot -vvv certonly --webroot -w /var/www/certbot \
+#     $staging_arg \
+#     $email_arg \
+#     ${domain_args[@]} \
+#     --rsa-key-size $rsa_key_size \
+#     --agree-tos \
+#     --force-renewal" certbotContainerService
+
+# This worked:
+docker exec certbotContainerService sh -c "\
   certbot -vvv certonly --webroot -w /var/www/certbot \
-    $staging_arg \
-    $email_arg \
-    ${domain_args[@]} \
-    --rsa-key-size $rsa_key_size \
+    --email patrick.wm.meaney@gmail.com \
+    -d livestauction.com -d www.livestauction.com \
+    --rsa-key-size 4096 \
     --agree-tos \
-    --force-renewal" certbotContainerService
-echo
+    --force-renewal"
 
 echo "### Reloading nginx ..."
 docker restart nginxContainerService

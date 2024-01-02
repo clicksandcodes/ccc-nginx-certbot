@@ -159,3 +159,20 @@ docker-compose run --rm "\
     livestauction.com www.livestauction.com \
     --rsa-key-size $rsa_key_size \
     --agree-tos" certbotContainerService
+
+
+
+
+docker exec nginxContainerService sh -c "envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
+
+export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
+
+docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+
+docker exec certbotContainerService sh -c "\
+  certbot -vvv certonly --webroot -w /var/www/certbot \
+    --email patrick.wm.meaney@gmail.com \
+    -d livestauction.com -d www.livestauction.com \
+    --rsa-key-size 4096 \
+    --agree-tos \
+    --force-renewal"
