@@ -36,10 +36,7 @@ docker exec -it nginx sh
 envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf
 
 # OR combine the two above lines:
-docker exec nginxContainerService sh -c "envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf"
-
-exit
-docker restart nginx
+docker exec nginxContainerService sh -c "envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 ```
 
 - check the domain (w/o https) via your browser and you should see the json response from the nginx server block
