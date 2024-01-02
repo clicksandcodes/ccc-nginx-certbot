@@ -79,7 +79,7 @@ fi
 #     --agree-tos \
 #     --force-renewal" certbotContainerService
 
-# This worked:
+# This worked WHEN RUN MANUALLY. Will check via this script.
 # docker exec certbotContainerService sh -c "\
 #   certbot -vvv certonly --webroot -w /var/www/certbot \
 #     --email patrick.wm.meaney@gmail.com \
@@ -88,12 +88,26 @@ fi
 #     --agree-tos \
 #     --force-renewal"
 
+# I skipped checking the above simple command and went for this, but it results in an error (mentioned below).  Will skip for now.
 # Now going to insert the shell env vars from above
+# docker exec certbotContainerService sh -c "\
+#   certbot -vvv certonly --webroot -w /var/www/certbot \
+#     $email_arg \
+#     ${domain_args[@]} \
+#     --rsa-key-size $rsa_key_size \
+#     --agree-tos \
+#     --force-renewal"
+
+# Still having problems with the above for some reason--
+# this error:
+# certbot: error: argument -d/--domains/--domain: expected one argument
+
+# So, I will keep it simple for now...
 docker exec certbotContainerService sh -c "\
   certbot -vvv certonly --webroot -w /var/www/certbot \
-    $email_arg \
-    ${domain_args[@]} \
-    --rsa-key-size $rsa_key_size \
+    --email patrick.wm.meaney@gmail.com \
+    -d livestauction.com -d www.livestauction.com \
+    --rsa-key-size 4096 \
     --agree-tos \
     --force-renewal"
 

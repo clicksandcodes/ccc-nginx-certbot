@@ -169,6 +169,9 @@ export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmai
 
 docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 
+
+
+____ For manual cert creation______
 docker exec certbotContainerService sh -c "\
   certbot -vvv certonly --webroot -w /var/www/certbot \
     --email patrick.wm.meaney@gmail.com \
