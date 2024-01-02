@@ -1,9 +1,8 @@
 version: '3'
 
 services:
-  nginx:
-    container_name: nginx
-    network_mode: host
+  nginxContainerService:
+    container_name: nginxContainerService
     env_file:
       - ./.env
     image: nginx:1.15-alpine
@@ -15,9 +14,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
-  certbot:
-    container_name: certbot
-    network_mode: host
+  certbotContainerService:
+    container_name: certbotContainerService
     image: certbot/certbot
     restart: unless-stopped
     volumes:

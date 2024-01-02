@@ -1,4 +1,5 @@
 
+https://gist.github.com/maxivak/4706c87698d14e9de0918b6ea2a41015
 
 Src:
 - https://github.com/wmnnd/nginx-certbot/tree/master
@@ -32,6 +33,10 @@ See the codeblock below-- this is just a summary of the steps.
 # Run this line by line.
 docker exec -it nginx sh
 envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf
+
+# OR combine the two above lines:
+docker exec nginxContainerService sh -c "envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf"
+
 exit
 docker restart nginx
 ```
@@ -86,6 +91,8 @@ Back outside of the container:
     # Now run it.
     sudo ./populated-init-letsencrypt.sh
     ```
+
+chmod +x init-letsencrypt.sh && sudo ./init-letsencrypt.sh
 - Check domain (w/ https)
 
 
