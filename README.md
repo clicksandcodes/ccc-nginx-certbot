@@ -142,3 +142,10 @@ Feel free to post questions in the comment section of the [accompanying guide](h
 
 ## License
 All code in this repository is licensed under the terms of the `MIT License`. For further information please refer to the `LICENSE` file.
+
+
+
+
+    # location / {
+    #     return 301 https://$host$request_uri;
+    # }

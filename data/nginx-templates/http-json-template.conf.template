@@ -11,9 +11,6 @@ server {
         root /var/www/certbot;
     }
 
-    # location / {
-    #     return 301 https://$host$request_uri;
-    # }
 
     location / {
       default_type application/json;
