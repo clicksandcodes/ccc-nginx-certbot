@@ -1,3 +1,14 @@
+### TLDR
+
+```bash
+docker-compose up
+
+docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
+
+export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
+
+docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+```
 
 https://gist.github.com/maxivak/4706c87698d14e9de0918b6ea2a41015
 
@@ -161,15 +172,12 @@ docker-compose run --rm "\
     --agree-tos" certbotContainerService
 
 
+____________ Steps_________________
 
 
-docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 
-export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
-
-docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
-
-
+If you recreate the nginxContainerService but not the certbot one, the certs will still exist in the server's project directory.  From there, they're automatically available to the nginx container via the docker volume (which is essentially a shared directory, synchronized between the linux server and the docker container) So, no need to re-reques them.  Instead, just reload the templates into conf files with:
+docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf"  && docker restart nginxContainerService
 
 ____ For manual cert creation______
 docker exec certbotContainerService sh -c "\
