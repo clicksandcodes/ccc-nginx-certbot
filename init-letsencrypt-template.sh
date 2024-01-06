@@ -39,9 +39,9 @@ fi
 
 # echo "### Starting nginx ..."
 # docker restart nginxContainerService
-# Problem: this wipes the whole nginx container-- do dont use this.
+# Problem: this (--force-recreate) wipes the whole nginx container-- do dont use this.
 # docker-compose up --force-recreate -d nginxContainerService
-echo
+# echo
 
 # echo "### Deleting dummy certificate for $domains ..."
 # docker-compose run --rm --entrypoint "\
