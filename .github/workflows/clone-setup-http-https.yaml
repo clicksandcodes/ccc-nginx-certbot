@@ -37,10 +37,12 @@ jobs:
           ssh dev "echo "#### Ssh connected-- github runner to remote server.""
           ssh dev "cat /etc/os-release"
           ssh dev "echo pwd is $(pwd)"
+      # If this fails again... on the stop & rm containers step... run it as two separate steps-- one for each container
       - name: "Remove containers & proj dir to prep env"
         run: |
           ssh dev "echo "##### Stop the existing docker containers -- nginx and certbot -- if they exist""
-          ssh dev "docker stop nginxContainerService certbotContainerService && docker rm nginxContainerService certbotContainerService"
+          ssh dev "docker stop certbotContainerService && docker rm certbotContainerService"
+          ssh dev "docker stop nginxContainerService && docker rm nginxContainerService"
           ssh dev "echo "##### Delete the project directory if it exists""
           ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
       - name: "Remove containers & proj dir to prep env"
