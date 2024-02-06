@@ -1,0 +1,93 @@
+
+# To do:
+# Output the github action cicd env vars as json.
+# they show up as Object object in GHA action log, currently
+name: trying http and https endpoints
+on:
+  push:
+    branches:
+      - main
+      # - blah
+
+env:
+  SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
+  DEV_SERVER_IP_FROM_GHA_ENV: ${{ secrets.DEV_SERVER_IP_2A }}
+  DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV: "patrick.wm.meaney@gmail.com"
+# env:
+  #  dont actually need this... just leaving it in for reference
+  # REGISTRY: ghcr.io/pmeaney
+  # IMAGE_NAME: simple_server_express
+jobs:
+  # basic_step_1:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Login to GitHub Container Registry"
+  #       #  dont actually need this... just leaving it in for reference
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GH_PAT_120923_FOR_SERVER_2A }}
+  make1_login_to_server_setup_http:
+    # needs: basic_step_1
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIV_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cat >>~/.ssh/config <<END
+          Host dev
+            HostName $DEV_SERVER_IP
+            User $SSH_USER
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking no
+          END
+          ssh dev "echo "we setup ssh connection, now lets test it" "
+          ssh dev "cat /etc/os-release"
+        env:
+          SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
+          SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
+          DEV_SERVER_IP: ${{ secrets.DEV_SERVER_IP_2A }}
+      - name: "Delete existing docker container.  If it doesnt exist, dont stop with an error message."
+        continue-on-error: true
+        run: |
+          ssh dev "docker stop nginxDockerContainer && docker rm nginxDockerContainer"
+      - name: "Delete existing project project directory If it doesnt exist, dont stop with an error message."
+        continue-on-error: true
+        run: |
+          ssh dev "sudo rm -rf /home/$SSH_USER/ccc-cicd-nginx-certbot-v1"
+          ssh dev "ls /home/$SSH_USER"
+      - name: "Run commands for Nginx Http JSON healthcheck endpoint"
+        run: |
+          ssh dev "echo We are in the step of feeding IP from GHA env var into the nginx conf file"
+          ssh dev "echo dev user email: $DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV"
+          ssh dev "echo the IP for NGINX http json healthcheck Conf file of this commit is: $DEV_SERVER_IP_FROM_GHA_ENV"
+          ssh dev "cd /home/$SSH_USER"
+          ssh dev "echo pwd is $(pwd)"
+          ssh dev "echo clone the repo..."
+      # ssh dev "git clone git@github.com:clicksandcodes/ccc-cicd-nginx-certbot-v1.git"
+      # ssh dev "touch ./ccc-cicd-nginx-certbot-v1/.env"
+      # ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-cicd-nginx-certbot-v1/.env"
+      # ssh dev "docker-compose -f /home/$SSH_USER/ccc-cicd-nginx-certbot-v1/my-v0--docker-compose.yml up -d nginxDockerContainer"
+
+# test1_ping_http:
+#   needs: make1_login_to_server_setup_http
+#   runs-on: ubuntu-latest
+#   steps:
+#     - name: "Ping the endpoint we created and check for status"
+#       env:
+#         DEV_SERVER_IP: ${{ secrets.DEV_SERVER_IP_2A }}
+#       run: |
+#         echo "##### Running curl on dev server 2A"
+
+#         status_msg=$(curl -s http://$DEV_SERVER_IP | jq -r '.status_msg')
+#         echo "Status Message: $status_msg"
+#         if echo "$status_msg" | grep -q "howdy_amigo"; then
+#           echo "##### The http endpoint is alive."
+#           exit 0
+#         else
+#           echo "##### The http endpoint is not alive."
+#           exit 1
+#         fi
