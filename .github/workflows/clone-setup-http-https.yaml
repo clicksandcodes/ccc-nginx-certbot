@@ -13,23 +13,8 @@ env:
   SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
   DEV_SERVER_IP_FROM_GHA_ENV: ${{ secrets.LINUX_DEV_SERVER_IP_2A }}
   DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV: "patrick.wm.meaney@gmail.com"
-# env:
-  #  dont actually need this... just leaving it in for reference
-  # REGISTRY: ghcr.io/pmeaney
-  # IMAGE_NAME: simple_server_express
 jobs:
-  # basic_step_1:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: "Login to GitHub Container Registry"
-  #       #  dont actually need this... just leaving it in for reference
-  #       uses: docker/login-action@v2
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GH_PAT_120923_FOR_SERVER_2A }}
   job1_login_to_server_setup_environment:
-    # needs: basic_step_1
     runs-on: ubuntu-latest
     steps:
       - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
@@ -50,11 +35,11 @@ jobs:
           ssh dev "echo pwd is $(pwd)"
 
 
-          ssh dev " echo "##### Delete the project directory if it exists""
+          ssh dev "echo "##### Delete the project directory if it exists""
           ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
 
 
-          ssh dev " echo "##### Stop the existing docker containers (nginx) certbot) if they exist""
+          ssh dev "echo "##### Stop the existing docker containers -- nginx and certbot -- if they exist""
           ssh dev "docker stop nginxContainerService certbotContainerService && docker rm nginxContainerService certbotContainerService"
 
 
