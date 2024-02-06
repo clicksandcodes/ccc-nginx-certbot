@@ -46,27 +46,29 @@ jobs:
           END
           ssh dev "echo "we setup ssh connection, now lets test it" "
           ssh dev "cat /etc/os-release"
+          ssh dev "echo pwd is $(pwd)"
+          ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
         env:
           SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
           SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
           DEV_SERVER_IP: ${{ secrets.LINUX_DEV_SERVER_IP_2A }}
-      - name: "Delete existing docker container.  If it doesnt exist, dont stop with an error message."
-        continue-on-error: true
-        run: |
-          ssh dev "docker stop nginxDockerContainer && docker rm nginxDockerContainer"
-      - name: "Delete existing project directory If it doesnt exist, dont stop with an error message."
-        continue-on-error: true
-        run: |
-          ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
-          ssh dev "ls /home/$SSH_USER"
-      - name: "Clone the project and setup the environment a bit"
-        run: |
-          ssh dev "echo We are in the step of feeding IP from GHA env var into the nginx conf file"
-          ssh dev "echo dev user email: $DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV"
-          ssh dev "cd /home/$SSH_USER"
-          ssh dev "echo pwd is $(pwd)"
-          ssh dev "echo clone the repo..."
-          ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
+      # - name: "Delete existing docker container.  If it doesnt exist, dont stop with an error message."
+      #   continue-on-error: true
+      #   run: |
+      #     ssh dev "docker stop nginxDockerContainer && docker rm nginxDockerContainer"
+      # - name: "Delete existing project directory If it doesnt exist, dont stop with an error message."
+      #   continue-on-error: true
+      #   run: |
+      #     ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
+      #     ssh dev "ls /home/$SSH_USER"
+      # - name: "Clone the project and setup the environment a bit"
+      #   run: |
+      #     ssh dev "echo We are in the step of feeding IP from GHA env var into the nginx conf file"
+      #     ssh dev "echo dev user email: $DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV"
+      #     ssh dev "cd /home/$SSH_USER"
+      #     ssh dev "echo pwd is $(pwd)"
+      #     ssh dev "echo clone the repo..."
+      #     ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
       # ssh dev "touch ./ccc-nginx-certbot/.env"
       # I dont need to place the IP into this file it needs to be the domain name
       # the ip was during testing.  now we are beyond that. make it the domain name
