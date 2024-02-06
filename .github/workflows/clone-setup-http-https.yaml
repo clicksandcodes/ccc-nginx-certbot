@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
-        continue-on-error: true
         env:
           SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
           SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
@@ -39,6 +38,7 @@ jobs:
           ssh dev "echo pwd is $(pwd)"
       # If this fails again... on the stop & rm containers step... run it as two separate steps-- one for each container
       - name: "Remove containers & proj dir to prep env"
+        continue-on-error: true
         run: |
           ssh dev "echo "##### Stop the existing docker containers -- nginx and certbot -- if they exist""
           ssh dev "docker stop certbotContainerService && docker rm certbotContainerService"
