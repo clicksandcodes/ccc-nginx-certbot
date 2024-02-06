@@ -28,7 +28,7 @@ jobs:
   #         registry: ghcr.io
   #         username: ${{ github.actor }}
   #         password: ${{ secrets.GH_PAT_120923_FOR_SERVER_2A }}
-  make1_login_to_server_setup_http:
+  job1_login_to_server_setup_environment:
     # needs: basic_step_1
     runs-on: ubuntu-latest
     steps:
@@ -71,8 +71,34 @@ jobs:
           ssh dev "touch ./ccc-nginx-certbot/.env"
           ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
 
+  job2_http_healthcheck_setup_and_ping:
+    needs: job1_login_to_server_setup_environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Run commands for Nginx Http JSON healthcheck endpoint"
+        run: |
+          ssh dev "echo beginnging_of_job2_http_healthcheck_setup_and_ping"
+          ssh dev "docker-compose up -d"
+          ssh dev "docker ps -a"
+
+  job3_certbot_request_certs:
+    needs: job2_http_healthcheck_setup_and_ping
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Run commands to request certs to upgrade http to https"
+        run: |
+          ssh dev "echo beginnging_of_job3_certbot_request_certs"
+
+  job4_https_healthcheck_setup_and_ping:
+    needs: job3_certbot_request_certs
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Run commands to request certs to upgrade http to https"
+        run: |
+          ssh dev "echo job4_https_healthcheck_setup_and_ping"
+
 # test1_ping_http:
-#   needs: make1_login_to_server_setup_http
+#   needs: job1_login_to_server_setup_environment
 #   runs-on: ubuntu-latest
 #   steps:
 #     - name: "Ping the endpoint we created and check for status"

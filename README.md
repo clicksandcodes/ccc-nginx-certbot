@@ -30,7 +30,7 @@ Then run the second one, then the init-letsencrypt.sh file, and check that https
 
 ### Clone repo and start up the http endpoint
 
-- git clone the repo.
+- git clone the  repo.
 - enter the repo folder
 
 See the codeblock below-- this is just a summary of the steps.
