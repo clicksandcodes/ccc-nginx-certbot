@@ -71,7 +71,7 @@ jobs:
           ssh dev "touch ./ccc-nginx-certbot/.env"
           ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
       - name: "Navigate to project directory"
-        working-directory: /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot/ccc-nginx-certbot
+        working-directory: /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot
         run: |
           ssh dev "ls -a"
 
