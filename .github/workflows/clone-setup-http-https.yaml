@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
+        continue-on-error: true
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_PRIV_KEY" > ~/.ssh/id_ed25519
@@ -47,6 +48,7 @@ jobs:
           ssh dev "echo "we setup ssh connection, now lets test it""
           ssh dev "cat /etc/os-release"
           ssh dev "echo pwd is $(pwd)"
+          ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && cd ccc-nginx-certbot && docker-compose up -d"
         # ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
         env:
