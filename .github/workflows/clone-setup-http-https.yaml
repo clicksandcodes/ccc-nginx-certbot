@@ -70,7 +70,9 @@ jobs:
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git"
           ssh dev "touch ./ccc-nginx-certbot/.env"
           ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
-          ssh dev "cd  /home/$SSH_USER/ccc-nginx-certbot"
+      - name: "Navigate to project directory"
+        working-directory: /home/$SSH_USER/ccc-nginx-certbot
+        run: |
           ssh dev "ls -a"
 
 
