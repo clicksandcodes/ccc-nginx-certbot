@@ -44,7 +44,7 @@ jobs:
             IdentityFile ~/.ssh/id_ed25519
             StrictHostKeyChecking no
           END
-          ssh dev "echo "we setup ssh connection, now lets test it"
+          ssh dev "echo "we setup ssh connection, now lets test it""
           ssh dev "cat /etc/os-release"
           ssh dev "echo pwd is $(pwd)"
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
