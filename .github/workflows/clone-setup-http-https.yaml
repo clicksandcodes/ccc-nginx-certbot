@@ -95,9 +95,11 @@ jobs:
           DEV_SERVER_IP: ${{ secrets.LINUX_DEV_SERVER_IP_2A }}
       - name: "Run commands for Nginx Http JSON healthcheck endpoint"
         run: |
-          ssh dev "echo beginnging_of_job2_http_healthcheck_setup_and_ping"
+          ssh dev "echo beginnging_of_joZb2_http_healthcheck_setup_and_ping"
           ssh dev "cd /home/$SSH_USER/ccc-nginx-certbot"
-          ssh dev "docker-compose up -d"
+          ssh dev "echo pwd is $(pwd)"
+          ssh dev "echo ls"
+        
         # ssh dev "docker-compose up -d"
         # ssh dev "docker ps -a"
 
