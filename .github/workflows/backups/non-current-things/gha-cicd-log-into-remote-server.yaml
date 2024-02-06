@@ -42,7 +42,7 @@ jobs:
         env:
           SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
           SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
-          DEV_SERVER_IP: ${{ secrets.DEV_SERVER_IP_2A }}
+          DEV_SERVER_IP: ${{ secrets.DEV_LINUX_DEV_SERVER_IP_2A }}
       - name: "Test ssh connection"
         run: ssh dev "cat /etc/os-release"
       # - name: "Ssh in & git clone our nginx-certbot project"
@@ -51,7 +51,7 @@ jobs:
       - name: "Run commands for Nginx Http JSON healthcheck endpoint"
         env:
           SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
-          DEV_SERVER_IP_FROM_GHA_ENV: ${{ secrets.DEV_SERVER_IP_2A }}
+          DEV_SERVER_IP_FROM_GHA_ENV: ${{ secrets.DEV_LINUX_DEV_SERVER_IP_2A }}
           DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV: "patrick.wm.meaney@gmail.com"
           RUNNER_CONTEXT: ${{ toJson(runner) }}
         run: |

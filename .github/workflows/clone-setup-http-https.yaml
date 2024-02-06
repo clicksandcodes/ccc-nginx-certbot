@@ -1,4 +1,4 @@
-
+# 
 # To do:
 # Output the github action cicd env vars as json.
 # they show up as Object object in GHA action log, currently
@@ -11,7 +11,7 @@ on:
 
 env:
   SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
-  DEV_SERVER_IP_FROM_GHA_ENV: ${{ secrets.DEV_SERVER_IP_2A }}
+  DEV_SERVER_IP_FROM_GHA_ENV: ${{ secrets.LINUX_DEV_LINUX_DEV_SERVER_IP_2A }}
   DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV: "patrick.wm.meaney@gmail.com"
 # env:
   #  dont actually need this... just leaving it in for reference
@@ -49,7 +49,7 @@ jobs:
         env:
           SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
           SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
-          DEV_SERVER_IP: ${{ secrets.DEV_SERVER_IP_2A }}
+          DEV_SERVER_IP: ${{ secrets.LINUX_DEV_LINUX_DEV_SERVER_IP_2A }}
       - name: "Delete existing docker container.  If it doesnt exist, dont stop with an error message."
         continue-on-error: true
         run: |
@@ -78,7 +78,7 @@ jobs:
 #   steps:
 #     - name: "Ping the endpoint we created and check for status"
 #       env:
-#         DEV_SERVER_IP: ${{ secrets.DEV_SERVER_IP_2A }}
+#         DEV_SERVER_IP: ${{ secrets.LINUX_DEV_LINUX_DEV_SERVER_IP_2A }}
 #       run: |
 #         echo "##### Running curl on dev server 2A"
 
