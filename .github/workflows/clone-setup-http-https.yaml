@@ -69,9 +69,9 @@ jobs:
           ssh dev "echo clone the repo..."
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git"
           ssh dev "touch ./ccc-nginx-certbot/.env"
-          ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
-          ssh dev "cd ./ccc-nginx-certbot"
-          ssh dev "ls -a"
+          ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env ; ls -lah ; pwd"
+      # ssh dev "cd ./ccc-nginx-certbot; ls -lah ; pwd"
+      # ssh dev "ls -a"
       # So instead of cd ... ls -a, do `cd ccc-nginx-certbot ; ls -lah ; pwd`
       # also, try to keep it all in one step
       #  OR... just run the commands at an absolute directory path
