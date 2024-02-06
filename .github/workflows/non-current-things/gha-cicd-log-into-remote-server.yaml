@@ -1,0 +1,113 @@
+
+# To do:
+# Output the github action cicd env vars as json.
+# they show up as Object object in GHA action log, currently
+name: Ssh into remote server.
+on:
+  push:
+    branches:
+      # - main
+      - blah
+# env:
+  #  dont actually need this... just leaving it in for reference
+  # REGISTRY: ghcr.io/pmeaney
+  # IMAGE_NAME: simple_server_express
+jobs:
+  # basic_step_1:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Login to GitHub Container Registry"
+  #       #  dont actually need this... just leaving it in for reference
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GH_PAT_120923_FOR_SERVER_2A }}
+  test_login_to_server_2A:
+    # needs: basic_step_1
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIV_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cat >>~/.ssh/config <<END
+          Host dev
+            HostName $DEV_SERVER_IP
+            User $SSH_USER
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
+          SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
+          DEV_SERVER_IP: ${{ secrets.DEV_SERVER_IP_2A }}
+      - name: "Test ssh connection"
+        run: ssh dev "cat /etc/os-release"
+      # - name: "Ssh in & git clone our nginx-certbot project"
+      #   run: |
+      #     ssh dev "pwd"
+      - name: "Run commands for Nginx Http JSON healthcheck endpoint"
+        env:
+          SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
+          DEV_SERVER_IP_FROM_GHA_ENV: ${{ secrets.DEV_SERVER_IP_2A }}
+          DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV: "patrick.wm.meaney@gmail.com"
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: |
+          ssh dev "echo We are in the step of feeding IP from GHA env var into the nginx conf file"
+          ssh dev "echo dev user email: $DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV"
+          ssh dev "echo the IP for NGINX http json healthcheck Conf file of this commit is: $DEV_SERVER_IP_FROM_GHA_ENV"
+          ssh dev "cd /home/$SSH_USER"
+          ssh dev "echo pwd is $(pwd)"
+      - name: "House keeping -- stop & delete containers of same name"
+        continue-on-error: true
+        run: |
+            ssh dev "docker stop nginxDockerContainer"
+            ssh dev "docker rm nginxDockerContainer"
+      - name: "Clone repo, run docker up on the nginx service"
+        continue-on-error: true
+        run: |
+          ssh dev "CHANGE THIS TO GREP FOR EXISTENCE OF THE CONTAINER NAME?"
+          ssh dev "sudo rm -rf ccc-cicd-nginx-certbot-v1"
+          ssh dev "git clone git@github.com:clicksandcodes/ccc-cicd-nginx-certbot-v1.git"
+          ssh dev "cat ./ccc-cicd-nginx-certbot-v1/nginx-certbot-stuff/data/nginx/a-http-json-healthcheck.conf"
+          ssh dev "docker-compose -f ./ccc-cicd-nginx-certbot-v1/my-v0--docker-compose.yml up -d nginxDockerContainer"
+          ssh dev "docker -v"
+          ssh dev "docker-compose -v"
+        # ssh dev "docker exec nginxDockerContainer ls"
+
+        # ssh dev "docker exec -it nginxDockerContainer sh"
+        # ssh dev "docker exec -it nginxDockerContainer sh"
+        # ssh dev "if [ ! "$(docker ps -a -q -f name=nginxDockerContainer)" ];  \
+        #   | then \
+        #   |  if [ "$(docker ps -aq -f status=exited -f name=nginxDockerContainer)" ]; then \
+        #   |    docker rm nginxDockerContainer \
+        #   |  fi \
+        #   | docker-compose -f ./ccc-cicd-nginx-certbot-v1/my-v0--docker-compose.yml up -d nginxDockerContainer \
+        #   | fi"
+        # ssh dev "docker stop nginxDockerContainer && docker rm nginxDockerContainer"
+        # ssh dev "docker-compose -f ./ccc-cicd-nginx-certbot-v1/my-v0--docker-compose.yml up -d nginxDockerContainer"
+        # ssh dev "docker exec -it nginxDockerContainer sh"
+        # ssh dev "docker stop ${DOCKER_CONTAINER_LIST}"
+        # ssh dev "ls"
+
+      # ssh dev "echo Deleting the previous directory of the project so we can clone fresh"
+      # ssh dev "rm -rf gha-cicd/"
+      # ssh dev "mkdir gha-cicd"
+      # ssh dev "cd /home/$SSH_USER/gha-cicd"
+      # ssh dev "ls"
+      # ssh dev "echo pwd is $(pwd)"
+      # ssh dev "touch blah.md"
+
+      # ssh dev "git clone git@github.com:clicksandcodes/ccc-cicd-nginx-certbot-v1.git"
+      # ssh dev "cd ccc-cicd-nginx-certbot-v1"
+      # ssh dev "ls"
+      # ssh dev "cat ./nginx-certbot-stuff/data/nginx/a-http-json-healthcheck.conf"
+      # - name: "Checkout the repo"
+      #   uses: actions/checkout@v3
+      # - name: "Verify the repo was checked out"
+      #   run: |
+      #     ssh dev "echo pwd is $(pwd)"
+      # ssh dev "cat ./nginx-certbot-stuff/data/nginx/a-http-json-healthcheck.conf"
+        # ssh dev "ls"
