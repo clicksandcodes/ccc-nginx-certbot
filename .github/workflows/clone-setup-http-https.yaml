@@ -98,7 +98,7 @@ jobs:
           ssh dev "echo beginnging_of_joZb2_http_healthcheck_setup_and_ping"
           ssh dev "cd /home/$SSH_USER/ccc-nginx-certbot"
           ssh dev "echo pwd is $(pwd)"
-          ssh dev "echo ls"
+          ssh dev "ls"
         
         # ssh dev "docker-compose up -d"
         # ssh dev "docker ps -a"
