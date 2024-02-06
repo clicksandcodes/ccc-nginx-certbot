@@ -54,7 +54,7 @@ jobs:
         continue-on-error: true
         run: |
           ssh dev "docker stop nginxDockerContainer && docker rm nginxDockerContainer"
-      - name: "Delete existing project project directory If it doesnt exist, dont stop with an error message."
+      - name: "Delete existing project directory If it doesnt exist, dont stop with an error message."
         continue-on-error: true
         run: |
           ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
