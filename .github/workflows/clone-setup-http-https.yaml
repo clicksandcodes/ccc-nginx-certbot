@@ -45,10 +45,20 @@ jobs:
             IdentityFile ~/.ssh/id_ed25519
             StrictHostKeyChecking no
           END
-          ssh dev "echo "we setup ssh connection, now lets test it""
+          ssh dev "echo "#### Ssh connected-- github runner to remote server.""
           ssh dev "cat /etc/os-release"
           ssh dev "echo pwd is $(pwd)"
+
+
+          ssh dev " echo "##### Delete the project directory if it exists""
           ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
+
+
+          ssh dev " echo "##### Stop the existing docker containers (nginx) certbot) if they exist""
+          ssh dev "docker stop nginxContainerService certbotContainerService && docker rm nginxContainerService certbotContainerService"
+
+
+          ssh dev " echo "##### Now we can clone and run it""
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && cd ccc-nginx-certbot && docker-compose up -d"
         # ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
         env:
