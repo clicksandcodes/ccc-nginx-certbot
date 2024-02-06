@@ -96,8 +96,10 @@ jobs:
       - name: "Run commands for Nginx Http JSON healthcheck endpoint"
         run: |
           ssh dev "echo beginnging_of_job2_http_healthcheck_setup_and_ping"
+          ssh dev "cd /home/$SSH_USER/ccc-nginx-certbot"
           ssh dev "docker-compose up -d"
-          ssh dev "docker ps -a"
+        # ssh dev "docker-compose up -d"
+        # ssh dev "docker ps -a"
 
   job3_certbot_request_certs:
     needs: job2_http_healthcheck_setup_and_ping
