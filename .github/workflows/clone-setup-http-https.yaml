@@ -47,7 +47,8 @@ jobs:
           ssh dev "echo "we setup ssh connection, now lets test it""
           ssh dev "cat /etc/os-release"
           ssh dev "echo pwd is $(pwd)"
-          ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
+          ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && cd ccc-nginx-certbot && docker-compose up -d"
+        # ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
         env:
           SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
           SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
