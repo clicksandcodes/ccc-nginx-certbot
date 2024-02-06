@@ -70,11 +70,16 @@ jobs:
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git"
           ssh dev "touch ./ccc-nginx-certbot/.env"
           ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
-      - name: "Navigate to project directory"
-        working-directory: /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot
-        run: |
-          ssh dev "cd ccc-nginx-certbot"
+          ssh dev "cd ./ccc-nginx-certbot"
           ssh dev "ls -a"
+      # So instead of cd ... ls -a, do `cd ccc-nginx-certbot ; ls -lah ; pwd`
+      # also, try to keep it all in one step
+      #  OR... just run the commands at an absolute directory path
+      # - name: "Navigate to project directory"
+      #   working-directory: /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot
+      #   run: |
+      #     ssh dev "cd ccc-nginx-certbot"
+      #     ssh dev "ls -a"
 
 
   # job2_http_healthcheck_setup_and_ping:
@@ -107,7 +112,7 @@ jobs:
   #         ssh dev "ls"
   #         ssh dev "cd ccc-nginx-certbot"
   #         ssh dev "ls"
-        
+
   #       # ssh dev "docker-compose up -d"
   #       # ssh dev "docker ps -a"
 
