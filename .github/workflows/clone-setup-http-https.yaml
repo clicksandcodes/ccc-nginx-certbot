@@ -70,56 +70,58 @@ jobs:
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git"
           ssh dev "touch ./ccc-nginx-certbot/.env"
           ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
+          ssh dev "ls"
 
-  job2_http_healthcheck_setup_and_ping:
-    needs: job1_login_to_server_setup_environment
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIV_KEY" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          cat >>~/.ssh/config <<END
-          Host dev
-            HostName $DEV_SERVER_IP
-            User $SSH_USER
-            IdentityFile ~/.ssh/id_ed25519
-            StrictHostKeyChecking no
-          END
-          ssh dev "echo "we setup ssh connection, now lets test it" "
-          ssh dev "cat /etc/os-release"
-        env:
-          SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
-          SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
-          DEV_SERVER_IP: ${{ secrets.LINUX_DEV_SERVER_IP_2A }}
-      - name: "Run commands for Nginx Http JSON healthcheck endpoint"
-        run: |
-          ssh dev "echo beginnging_of_joZb2_http_healthcheck_setup_and_ping"
-          ssh dev "cd /home/$SSH_USER/ccc-nginx-certbot"
-          ssh dev "echo pwd is $(pwd)"
-          ssh dev "ls"
-          ssh dev "cd ccc-nginx-certbot"
-          ssh dev "ls"
+
+  # job2_http_healthcheck_setup_and_ping:
+  #   needs: job1_login_to_server_setup_environment
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
+  #       run: |
+  #         mkdir -p ~/.ssh/
+  #         echo "$SSH_PRIV_KEY" > ~/.ssh/id_ed25519
+  #         chmod 600 ~/.ssh/id_ed25519
+  #         cat >>~/.ssh/config <<END
+  #         Host dev
+  #           HostName $DEV_SERVER_IP
+  #           User $SSH_USER
+  #           IdentityFile ~/.ssh/id_ed25519
+  #           StrictHostKeyChecking no
+  #         END
+  #         ssh dev "echo "we setup ssh connection, now lets test it" "
+  #         ssh dev "cat /etc/os-release"
+  #       env:
+  #         SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
+  #         SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
+  #         DEV_SERVER_IP: ${{ secrets.LINUX_DEV_SERVER_IP_2A }}
+  #     - name: "Run commands for Nginx Http JSON healthcheck endpoint"
+  #       run: |
+  #         ssh dev "echo beginnging_of_joZb2_http_healthcheck_setup_and_ping"
+  #         ssh dev "cd /home/$SSH_USER/ccc-nginx-certbot"
+  #         ssh dev "echo pwd is $(pwd)"
+  #         ssh dev "ls"
+  #         ssh dev "cd ccc-nginx-certbot"
+  #         ssh dev "ls"
         
-        # ssh dev "docker-compose up -d"
-        # ssh dev "docker ps -a"
+  #       # ssh dev "docker-compose up -d"
+  #       # ssh dev "docker ps -a"
 
-  job3_certbot_request_certs:
-    needs: job2_http_healthcheck_setup_and_ping
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Run commands to request certs to upgrade http to https"
-        run: |
-          ssh dev "echo beginnging_of_job3_certbot_request_certs"
+  # job3_certbot_request_certs:
+  #   needs: job2_http_healthcheck_setup_and_ping
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Run commands to request certs to upgrade http to https"
+  #       run: |
+  #         ssh dev "echo beginnging_of_job3_certbot_request_certs"
 
-  job4_https_healthcheck_setup_and_ping:
-    needs: job3_certbot_request_certs
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Run commands to request certs to upgrade http to https"
-        run: |
-          ssh dev "echo job4_https_healthcheck_setup_and_ping"
+  # job4_https_healthcheck_setup_and_ping:
+  #   needs: job3_certbot_request_certs
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: "Run commands to request certs to upgrade http to https"
+  #       run: |
+  #         ssh dev "echo job4_https_healthcheck_setup_and_ping"
 
 # test1_ping_http:
 #   needs: job1_login_to_server_setup_environment
