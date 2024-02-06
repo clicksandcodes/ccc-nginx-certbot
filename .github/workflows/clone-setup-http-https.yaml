@@ -49,6 +49,10 @@ jobs:
         run: |
           ssh dev " echo "##### Now we can clone and run it""
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && cd ccc-nginx-certbot && docker-compose up -d"
+      - name: "Run commands to setup http, certbot, https"
+        run: |
+          ssh dev " echo "##### Setup http, certbot, https""
+          ssh dev "docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService"
         # ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
 
       # ssh dev "echo "##### Stop the existing docker containers -- nginx and certbot -- if they exist""
