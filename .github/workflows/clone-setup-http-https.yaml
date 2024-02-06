@@ -59,7 +59,7 @@ jobs:
         run: |
           ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
           ssh dev "ls /home/$SSH_USER"
-      - name: "Run commands for Nginx Http JSON healthcheck endpoint"
+      - name: "Clone the project and setup the environment a bit"
         run: |
           ssh dev "echo We are in the step of feeding IP from GHA env var into the nginx conf file"
           ssh dev "echo dev user email: $DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV"
@@ -75,6 +75,24 @@ jobs:
     needs: job1_login_to_server_setup_environment
     runs-on: ubuntu-latest
     steps:
+      - name: "Take ssh key from github repo, copy it into the ubuntu VM, so we can access the server & run commands"
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIV_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          cat >>~/.ssh/config <<END
+          Host dev
+            HostName $DEV_SERVER_IP
+            User $SSH_USER
+            IdentityFile ~/.ssh/id_ed25519
+            StrictHostKeyChecking no
+          END
+          ssh dev "echo "we setup ssh connection, now lets test it" "
+          ssh dev "cat /etc/os-release"
+        env:
+          SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
+          SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
+          DEV_SERVER_IP: ${{ secrets.LINUX_DEV_SERVER_IP_2A }}
       - name: "Run commands for Nginx Http JSON healthcheck endpoint"
         run: |
           ssh dev "echo beginnging_of_job2_http_healthcheck_setup_and_ping"
