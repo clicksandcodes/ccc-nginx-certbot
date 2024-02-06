@@ -73,6 +73,7 @@ jobs:
       - name: "Navigate to project directory"
         working-directory: /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot
         run: |
+          ssh dev "cd ccc-nginx-certbot"
           ssh dev "ls -a"
 
 
