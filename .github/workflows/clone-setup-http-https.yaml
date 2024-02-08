@@ -53,8 +53,10 @@ jobs:
         run: |
           ssh dev "echo "##### Setup http, certbot, https""
           ssh dev "echo "##### 1A -- setup http""
-          template_cmd=$(envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf)
-          ssh dev "docker exec nginxContainerService sh -c "$template_cmd" && docker restart nginxContainerService"
+
+          ssh dev "echo "##### Using docker exec to env var substitute command to insert env var of my domain name into nginx conf file (via template file)""
+
+          ssh dev "docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService"
 
           ssh dev echo "##### 1B -- Ping http"
 
