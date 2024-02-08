@@ -22,6 +22,7 @@ jobs:
           SSH_USER: ${{ secrets.LINUX_USER_DEVOPS_2A }}
           SSH_PRIV_KEY: ${{ secrets.LINUX_SSH_KEY_2A_PRIVATE }}
           DEV_SERVER_IP: ${{ secrets.LINUX_DEV_SERVER_IP_2A }}
+          DEV_DOMAIN_NAME: ${{ secrets.LINUX_DEV_DOMAIN_NAME }}
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_PRIV_KEY" > ~/.ssh/id_ed25519
@@ -59,7 +60,7 @@ jobs:
           ssh dev "docker exec nginxContainerService sh -c \"envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf\" && docker restart nginxContainerService"
 
           ssh dev "echo ##### 1B -- Ping http"
-          ssh dev "echo curl -s http://$NGINX_HOST/healthcheck"
+          ssh dev "curl -s http://$DEV_DOMAIN_NAME/healthcheck"
 
         # status_msg=$(curl -s http://$NGINX_HOST | jq -r '.status_msg')
         # echo "Status Message: $status_msg"
