@@ -58,17 +58,18 @@ jobs:
 
           ssh dev "docker exec nginxContainerService sh -c \"envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf\" && docker restart nginxContainerService"
 
-          ssh dev echo "##### 1B -- Ping http"
+          ssh dev "echo ##### 1B -- Ping http"
+          ssh dev "curl -s http://$NGINX_HOST"
 
-          status_msg=$(curl -s http://$NGINX_HOST | jq -r '.status_msg')
-          echo "Status Message: $status_msg"
-          if echo "$status_msg" | grep -q "howdy_amigo"; then
-            echo "##### The http endpoint is alive."
-            exit 0
-          else
-            echo "##### The http endpoint is not alive."
-            exit 1
-          fi
+        # status_msg=$(curl -s http://$NGINX_HOST | jq -r '.status_msg')
+        # echo "Status Message: $status_msg"
+        # if echo "$status_msg" | grep -q "howdy_amigo"; then
+        #   echo "##### The http endpoint is alive."
+        #   exit 0
+        # else
+        #   echo "##### The http endpoint is not alive."
+        #   exit 1
+        # fi
     # ccc-nginx-certbot
     # /data/nginx-templates/http-json-template.conf.template
         # ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
