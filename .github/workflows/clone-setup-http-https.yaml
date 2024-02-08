@@ -51,6 +51,8 @@ jobs:
           ssh dev " echo "##### Now we can clone and run it""
           ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && cd ccc-nginx-certbot && docker-compose up -d"
       - name: "Run commands to setup http, certbot, https"
+        env:
+          DEV_DOMAIN_NAME: ${{ secrets.LINUX_DEV_DOMAIN_NAME }}
         run: |
           ssh dev "echo "##### Setup http, certbot, https""
           ssh dev "echo "##### 1A -- setup http""
