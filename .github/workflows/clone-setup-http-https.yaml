@@ -59,7 +59,7 @@ jobs:
           ssh dev "docker exec nginxContainerService sh -c \"envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf\" && docker restart nginxContainerService"
 
           ssh dev "echo ##### 1B -- Ping http"
-          ssh dev "curl -s http://$NGINX_HOST"
+          ssh dev "echo curl -s http://$NGINX_HOST/healthcheck"
 
         # status_msg=$(curl -s http://$NGINX_HOST | jq -r '.status_msg')
         # echo "Status Message: $status_msg"
