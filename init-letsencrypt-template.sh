@@ -105,8 +105,8 @@ fi
 # So, I will keep it simple for now...
 docker exec certbotContainerService sh -c "\
   certbot -vvv certonly --webroot -w /var/www/certbot \
-    --email patrick.wm.meaney@gmail.com \
-    -d livestauction.com -d www.livestauction.com \
+    --email ${ADMIN_EMAIL} \
+    -d ${NGINX_HOST} -d www.${NGINX_HOST} \
     --rsa-key-size 4096 \
     --agree-tos \
     --force-renewal"
