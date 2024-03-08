@@ -67,11 +67,12 @@ jobs:
 
           ssh dev "echo "##### 2A -- setup https""
 
-          ssh dev "export NGINX_HOST=$DEV_DOMAIN_NAME && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < /home/$SSH_USER/ccc-nginx-certbot/init-letsencrypt-template.sh > /home/$SSH_USER/ccc-nginx-certbot/populated-init-letsencrypt.sh && chmod +x /home/$SSH_USER/ccc-nginx-certbot/populated-init-letsencrypt.sh && sudo ./home/$SSH_USER/ccc-nginx-certbot/populated-init-letsencrypt.sh"
+          ssh dev "export NGINX_HOST=$DEV_DOMAIN_NAME && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < /home/$SSH_USER/ccc-nginx-certbot/init-letsencrypt-template.sh > /home/$SSH_USER/ccc-nginx-certbot/populated-init-letsencrypt.sh && chmod +x ./home/$SSH_USER/ccc-nginx-certbot/populated-init-letsencrypt.sh && sudo ./home/$SSH_USER/ccc-nginx-certbot/populated-init-letsencrypt.sh"
 
           ssh dev "echo ##### 2B -- Ping https"
+          ssh dev "echo ##### 2B -- Need to setup https nginx container command"
 
-          ssh dev "curl -s https://$DEV_DOMAIN_NAME/healthcheck"
+        # ssh dev "curl -s https://$DEV_DOMAIN_NAME/healthcheck"
 
         # status_msg=$(curl -s http://$NGINX_HOST | jq -r '.status_msg')
         # echo "Status Message: $status_msg"
