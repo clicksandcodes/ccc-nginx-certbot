@@ -2,7 +2,9 @@
 
 This is a project to get a basic http & https healthcheck endpoint (and basic html page) running in four commands.
 
-## Here's how to get it going, in detail. Following these instructions is a TLDR.
+## Here's how to get it going, in detail.
+
+### Below these instructions is a TLDR.
 
 ### Step 1: Setup a healthcheck endpoint for http traffic, as a prerequisite to requesting TLS certificates.
 
