@@ -17,7 +17,7 @@ This is a project to get a basic http & https healthcheck endpoint (and basic ht
 
 - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Edit**</span> the .env file: replace the value for `NGINX_HOST` with your domain name or the IP address of your server. If you're just testing things out, I recommend using the IP address of your server. **For the remainder of these instructions I will refer to this as domain.com (but consider it as your server IP if that's what you use as NGINX_HOST)**
 
-- <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Open**</span> **two** terminal windows. **In both windows**, ssh into your server. So, <span style="color:blue; font-weight:bold; font-size: 1.5rem">Run:</span> `ssh yourServerUser@yourServerIP` two separate terminal windows
+- <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Open**</span> **two** terminal windows. **In both windows**, ssh into your server. So, <span style="color:blue; font-weight:bold; font-size: 1.5rem">Run:</span> `ssh yourServerUser@yourServerIP` in two separate terminal windows
 
   > - _(Or you can use just one terminal window-- in which case, you'd just add the `-d` flag to the end of the `docker-compose up` command to run the project in the background. I prefer to keep it in the "foreground" so I can see the logs from the two containers (certbot & nginx) in real time)_
 
