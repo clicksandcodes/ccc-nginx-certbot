@@ -10,18 +10,18 @@ This is a project to get a basic http & https healthcheck endpoint (and basic ht
 
 - Clone this repo.
 
-  - <span style="color:blue; font-weight:bold; font-size: 1.5rem">Command to run:</span>
+  - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run:**</span>
   - `git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git`
 
-- <span style="color:blue; font-weight:bold; font-size: 1.5rem">Edit</span> the .env file: replace the value for `NGINX_HOST` with your domain name or the IP address of your server. If you're just testing things out, I recommend using the IP address of your server. **For the remainder of these instructions I will refer to this as domain.com (but consider it as your server IP if that's what you use as NGINX_HOST)**
+- <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Edit**</span> the .env file: replace the value for `NGINX_HOST` with your domain name or the IP address of your server. If you're just testing things out, I recommend using the IP address of your server. **For the remainder of these instructions I will refer to this as domain.com (but consider it as your server IP if that's what you use as NGINX_HOST)**
 
-- <span style="color:blue; font-weight:bold; font-size: 1.5rem">Open</span> **two** terminal windows. **In both windows**, ssh into your server. So, <span style="color:blue; font-weight:bold; font-size: 1.5rem">Run:</span> `ssh yourServerUser@yourServerIP` two separate terminal windows
+- <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Open**</span> **two** terminal windows. **In both windows**, ssh into your server. So, <span style="color:blue; font-weight:bold; font-size: 1.5rem">Run:</span> `ssh yourServerUser@yourServerIP` two separate terminal windows
 
   > - _(Or you can use just one terminal window-- in which case, you'd just add the `-d` flag to the end of the `docker-compose up` command to run the project in the background. I prefer to keep it in the "foreground" so I can see the logs from the two containers (certbot & nginx) in real time)_
 
 - Now in Terminal Window #1, start the docker-compose project:
 
-  - <span style="color:blue; font-weight:bold; font-size: 1.5rem">Command to run:</span>
+  - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run:**</span>
   - `docker-compose up`
   - You'll see Certbot & Nginx boot up.
   - **That's all you'll do in Terminal Window #1**
@@ -33,10 +33,10 @@ This is a project to get a basic http & https healthcheck endpoint (and basic ht
   - The command itself takes an nginx configuration template file and feed it that "NGINX_HOST" environment variable, and then outputs an nginx configuration file.
   - Now nginx has access to a configuration file. The configuration file configures Nginx to serve a /healthcheck endpoint at domain or IP you specified as the "NGINX_HOST" in the .env file.
   - So, you'll be able to visit http://theDomainOrIP/healthcheck and see a JSON data object like this: `{ "api_version": "0.0.1", "status_msg": "http_is_alive", "status_code": "200" }` -- The purpose of which is simply to inform you that the nginx server can now support unsecured traffic to & from the public internet.
-    - <span style="color:blue; font-weight:bold; font-size: 1.5rem">Command to run:</span>
+    - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run:**</span>
     - `docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService`
     - (Remember-- run that command in Terminal Window #2. Because we leave Terminal Window #1 as simply the window to show the docker container logs in real time)
-    - <span style="color:blue; font-weight:bold; font-size: 1.5rem">Open</span> your browser or create an HTTP GET request to: http://theDomainOrIP/healthcheck
+    - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Open**</span> your browser or create an HTTP GET request to: http://theDomainOrIP/healthcheck
     - > Be sure it navigates to http:// and not http**s**://
 
 #### Sweet. Now we can serve unsecure traffic. Not exactly ideal-- However, it is a requirement for receiving TLS certificates from Let's Encrypt via Cerbot. So, that's why it's step 1.
@@ -47,7 +47,7 @@ This is a project to get a basic http & https healthcheck endpoint (and basic ht
 
 - In this next command, you'll replace two values in the command with 1. your own domain or server's IP address 2. your email address (as the server administrator)
 - The `export` linux command places those two items into your server's set environment variables. From there, the command combines the environment variables with a template shell file to output a "populated" shell file-- i.e. a shell file populated with the two environment variables. It then runs the populated shell file.
-  - <span style="color:blue; font-weight:bold; font-size: 1.5rem">Command to run</span>
+  - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run**</span>
   - `export NGINX_HOST=YOUR_DOMAIN_OR_SERVER_IP && export ADMIN_EMAIL=YOUR_EMAIL_ADDRESS && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh`
 - In Terminal Window #1, you'll see the certbot container request certificates from the Let's Encrypt service. The certbot container will also create a new directory in the project directory: ./data/certbot which will contain the certificates and other related files.
 
@@ -58,9 +58,9 @@ This is a project to get a basic http & https healthcheck endpoint (and basic ht
 > <span style="color:darkGreen; font-size: 1.1rem">In this step, in a manner very similar to step #1, we run a docker command which will output a new nginx configuration file. How it works is... once again, it takes an environment variable ("NGINX_HOST") and combines it with a configuration template file (see it at ./data/nginx-templates/https-json-template.conf.template) in order to output an Nginx configuration file into the Nginx docker container. That configuration file will use the TLS certificates to host an https page of a basic html file at https://domain.com/ as well as a healthcheck endpoint at https://domain.com/healthcheck</span>
 
 - The next step will do the aforementioned procedures, and then reload the nginx docker container.
-- <span style="color:blue; font-weight:bold; font-size: 1.5rem">Command to run:</span>
+- <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run:**</span>
 - `docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService`
-- <span style="color:blue; font-weight:bold; font-size: 1.5rem">Open</span> on a browser, or access via an HTTP GET Request the following domains:
+- <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Open**</span> on a browser, or access via an HTTP GET Request the following domains:
   - https://domain.com/ - You'll see a very simply html page which says "Hello World, I am an https endpoint serving basic html"
   - https://domain.com/healthcheck - you'll see this JSON object: `{"api_version":"0.0.1", "status_msg":"https_is_alive", "status_code":"200"}`
 
