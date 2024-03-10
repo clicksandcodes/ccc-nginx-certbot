@@ -2,7 +2,9 @@
 
 This is a project to get a basic http & https healthcheck endpoint (and basic html page) running in four commands.
 
-It runs via a CICD file located at: `./github/workflows/clone-setup-http-https.yaml` when you git commit to the main branch (or other branch specified at the beginning of that file)
+It runs via a CICD file located at: `./github/workflows/clone-setup-http-https.yaml` when you git commit to the main branch (or other branch specified at the beginning of that file).
+
+The CICD creates a temporary server which runs an ssh login into a remote server passed in via environment variables set within the github repo secrets. Those env vars are fed from github secerts into the github CICD process, and other env vars from the cicd process, plus the local repo's .env file... into docker containers. The two docker containers are: **nginx**, _for an http & https healthcheck endpoint_ and **certbot**, _for a certbot-to-lets-encrypt request for tls certificates._
 
 ## Here's how to get it going, in detail.
 
