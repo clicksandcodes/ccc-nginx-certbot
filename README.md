@@ -2,6 +2,8 @@
 
 This is a project to get a basic http & https healthcheck endpoint (and basic html page) running in four commands.
 
+It runs via a CICD file located at: `./github/workflows/clone-setup-http-https.yaml` when you git commit to the main branch (or other branch specified at the beginning of that file)
+
 ## Here's how to get it going, in detail.
 
 ### Below these instructions is a TLDR.
