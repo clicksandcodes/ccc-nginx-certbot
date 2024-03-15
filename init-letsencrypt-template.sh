@@ -26,6 +26,17 @@ if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/
   echo
 fi
 
+docker exec certbotContainerService sh -c "\
+  certbot -vvv certonly --webroot -w /var/www/certbot \
+    --email ${ADMIN_EMAIL} \
+    -d ${NGINX_HOST} -d www.${NGINX_HOST} \
+    --rsa-key-size 4096 \
+    --agree-tos \
+    --force-renewal"
+
+echo "### Reloading nginx ..."
+docker restart nginxContainerService
+
 # echo "### Creating dummy certificate for $domains ..."
 # path="/etc/letsencrypt/live/$domains"
 # mkdir -p "$data_path/conf/live/$domains"
@@ -102,15 +113,6 @@ fi
 # this error:
 # certbot: error: argument -d/--domains/--domain: expected one argument
 
-# So, I will keep it simple for now...
-docker exec certbotContainerService sh -c "\
-  certbot -vvv certonly --webroot -w /var/www/certbot \
-    --email ${ADMIN_EMAIL} \
-    -d ${NGINX_HOST} -d www.${NGINX_HOST} \
-    --rsa-key-size 4096 \
-    --agree-tos \
-    --force-renewal"
-
-echo "### Reloading nginx ..."
-docker restart nginxContainerService
 # docker-compose exec nginx nginx -s reload
+
+# So, I will keep it simple for now...
