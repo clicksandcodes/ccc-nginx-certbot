@@ -87,7 +87,7 @@ However in the mean time, I can simply spin up the servers by:
 1. Running my terraform script workflow:
    - https://github.com/clicksandcodes/ccc-server-starter-kit
    - Documentation for that: https://github.com/clicksandcodes/ccc-server-starter-docs
-2. Then running the four commands in this project.
+2. Then, from clone this project (ccc-nginx-certbot), move into its directory, and runne the four commands in this project.
 
 Hence... I don't _really_ have a pressing need to fix the last piece of that workflow. Though I expect to return to it in the near future.
 
@@ -102,10 +102,15 @@ In this case though...
 I simply made this project public to demonstrate an example project I've been working on. Otherwise this would be a private repo. Even then, since this is a project which is eventually intended to be a public website or app, and my email address is also relatively public information).
 
 ```bash
-edit .env as needed, as well as the 3rd command below.
+# edit .env as needed, as well as the 3rd command below.
 
+# Don't forget to move into the ccc-nginx-certbot directory, which is where you'll run these commands from.
+
+# This gets the containers running...
+# But without using the `-d` flag it will take up the shell-- with the benefit of showing live logs.  So, I recommend after running this, to create a 2nd terminal window and ssh into the server with it, move into the directory, and then run commands that follow (docker exec, etc.)
 docker-compose up
 
+# run these in a 2nd new ssh shell, in the ccc-nginx-certbot directory
 docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 
 export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
