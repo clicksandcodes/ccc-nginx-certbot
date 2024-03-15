@@ -1,0 +1,12 @@
+
+# Note: This file is only usable with VS Code HTTP Rest Client extension installed.
+# More info: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+###
+## First, we access the HTTP (not HTTPS!!) healthcheck endpoint
+GET http://livestauction.com/healthcheck
+
+## Next, after running a cert request docker container...
+# We can then access the HTTPS healtcheck endpoint
+
+###
+GET https://livestauction.com/healthcheck
