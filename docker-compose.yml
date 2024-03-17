@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   nginxContainerService:
@@ -6,8 +6,11 @@ services:
     env_file:
       - ./.env
     image: nginx:1.15-alpine
-    restart: unless-stopped
+    # restart: unless-stopped
+    restart: no
     volumes:
+      # setting a shared volume with conf.d so we can easily add new configs to the nginxContainerService.
+      - ./data/nginx-confd-volume:/etc/nginx/conf.d
       - ./data/nginx-templates:/etc/nginx/templates
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
