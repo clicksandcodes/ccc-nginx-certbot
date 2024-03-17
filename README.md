@@ -23,7 +23,7 @@ docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/te
 # Now, access http://domain.com/healthcheck to see a JSON response
 
 # Here, be sure to update NGINX_HOST & ADMIN_EMAIL to your variables-- your domain or remote server IP, and your email.
-export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
+export NGINX_HOST=yourDomainName.com && export ADMIN_EMAIL=yourEmailAddress@someEmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
 
 docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 
