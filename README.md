@@ -11,6 +11,10 @@ The CICD creates a temporary server which runs an ssh login into a remote server
 ```bash
 # clone this repo.
 
+# Edit this line in the file `init-letsencrypt-template.sh`:
+# -d ${NGINX_HOST} -d www.${NGINX_HOST} -d api.${NGINX_HOST} \
+# to remove  `-d api.${NGINX_HOST}` -- you won't need that unless you're using a subdomain in your project.
+
 # edit .env to add your domain name (or remote server IP). You'll also need to edit the 3rd command below, to add your domain name (or remote server IP) and email address.
 
 # Don't forget to move into the ccc-nginx-certbot directory, which is where you'll run these commands from.
@@ -50,6 +54,11 @@ docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/ngin
 
   - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run:**</span>
   - `git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git`
+
+- Edit this line in the file `init-letsencrypt-template.sh`:
+
+  - `d ${NGINX_HOST} -d www.${NGINX_HOST} -d api.${NGINX_HOST} \`
+  - to remove `-d api.${NGINX_HOST}` -- you won't need that unless you're using a subdomain in your project.
 
 - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Edit**</span> the .env file: replace the value for `NGINX_HOST` with your domain name or the IP address of your server. If you're just testing things out, I recommend using the IP address of your server. **For the remainder of these instructions I will refer to this as domain.com (but consider it as your server IP if that's what you use as NGINX_HOST)**
 
