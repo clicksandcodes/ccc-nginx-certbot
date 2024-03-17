@@ -1,6 +1,11 @@
 # https://docs.strapi.io/dev-docs/deployment/nginx-proxy
 # path: /etc/nginx/conf.d/upstream.conf
 
+
+#
+# DONT FORGET
+# You need to make a DNS record for the subdomain (in this case, I'm going with the default "api" subdomain shown in the above strapi nginx-proxy docs)
+
 # Strapi server
 upstream strapi {
     server 127.0.0.1:1337;
