@@ -6,6 +6,32 @@ It runs via a CICD file located at: `./github/workflows/clone-setup-http-https.y
 
 The CICD creates a temporary server which runs an ssh login into a remote server passed in via environment variables set within the github repo secrets. Those env vars are fed from github secerts into the github CICD process, and other env vars from the cicd process, plus the local repo's .env file... into docker containers. The two docker containers are: **nginx**, _for an http & https healthcheck endpoint_ and **certbot**, _for a certbot-to-lets-encrypt request for tls certificates._
 
+## How to get it going, in short:
+
+```bash
+# edit .env as needed, as well as the 3rd command below.
+
+# Don't forget to move into the ccc-nginx-certbot directory, which is where you'll run these commands from.
+
+# This gets the containers running...
+# But without using the `-d` flag it will take up the shell-- with the benefit of showing live logs.  So, I recommend after running this, to create a 2nd terminal window and ssh into the server with it, move into the directory, and then run commands that follow (docker exec, etc.)
+docker-compose up
+
+# run these in a 2nd new ssh shell, in the ccc-nginx-certbot directory
+docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
+
+# Now, access http://domain.com/healthcheck to see a JSON response
+
+# Here, be sure to update NGINX_HOST & ADMIN_EMAIL to your variables-- your domain or remote server IP, and your email.
+export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
+
+docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+
+# Now, access https://domain.com/healthcheck to see a JSON response
+```
+
+---
+
 ## Here's how to get it going, in detail.
 
 ### Below these instructions is a TLDR.
