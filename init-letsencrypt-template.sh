@@ -29,7 +29,7 @@ fi
 docker exec certbotContainerService sh -c "\
   certbot -vvv certonly --webroot -w /var/www/certbot \
     --email ${ADMIN_EMAIL} \
-    -d ${NGINX_HOST} -d www.${NGINX_HOST} \
+    -d ${NGINX_HOST} -d www.${NGINX_HOST} -d api.${NGINX_HOST} \
     --rsa-key-size 4096 \
     --agree-tos \
     --force-renewal"
