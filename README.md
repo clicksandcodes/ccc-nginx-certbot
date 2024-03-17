@@ -139,7 +139,7 @@ docker-compose up
 # run these in a 2nd new ssh shell, in the ccc-nginx-certbot directory
 docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 
-export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
+export NGINX_HOST=yourDomainName.com && export ADMIN_EMAIL=yourEmailAddress@someEmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
 
 docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 ```
@@ -237,7 +237,7 @@ Back outside of the container:
 - From inside the project directory, Run these commands (permission to run file, file run)
   - ```shell
     # Set the env vars in the Linux server:
-    export NGINX_HOST=livestauction.com && export ADMIN_EMAIL=patrick.wm.meaney@gmail.com
+    export NGINX_HOST=yourDomainName.com && export ADMIN_EMAIL=yourEmailAddress@someEmail.com
     # Here we populate the .sh file with the env vars.  When you run this command, you'll see the output of the file which has now been populated with the above two env vars.
     envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh
     # Now give the current linux user permission to to execute the file
@@ -306,8 +306,8 @@ All code in this repository is licensed under the terms of the `MIT License`. Fo
 docker-compose run --rm "\
  certbot -vvv certonly --webroot -w /var/www/certbot \
  0 \
- patrick.wm.meaney@gmail.com \
- livestauction.com www.livestauction.com \
+ yourEmailAddress@someEmail.com \
+ yourDomainName.com www.yourDomainName.com \
  --rsa-key-size $rsa_key_size \
  --agree-tos" certbotContainerService
 
@@ -319,8 +319,8 @@ docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/te
 \_**\_ For manual cert creation\_\_\_\_**
 docker exec certbotContainerService sh -c "\
  certbot -vvv certonly --webroot -w /var/www/certbot \
- --email patrick.wm.meaney@gmail.com \
- -d livestauction.com -d www.livestauction.com \
+ --email yourEmailAddress@someEmail.com \
+ -d yourDomainName.com -d www.yourDomainName.com \
  --rsa-key-size 4096 \
  --agree-tos \
  --force-renewal"
