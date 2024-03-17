@@ -15,16 +15,20 @@ The CICD creates a temporary server which runs an ssh login into a remote server
 
 # This gets the containers running...
 # But without using the `-d` flag it will take up the shell-- with the benefit of showing live logs.  So, I recommend after running this, to create a 2nd terminal window and ssh into the server with it, move into the directory, and then run commands that follow (docker exec, etc.)
+# COMMAND 1 OF 4
 docker-compose up
 
-# run these in a 2nd new ssh shell, in the ccc-nginx-certbot directory
+# run these next 3 commands in a 2nd new ssh shell, in the ccc-nginx-certbot directory
+# COMMAND 2 OF 4
 docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 
 # Now, access http://domain.com/healthcheck to see a JSON response
 
 # Here, be sure to update NGINX_HOST & ADMIN_EMAIL to your variables-- your domain or remote server IP, and your email.
+# COMMAND 3 OF 4
 export NGINX_HOST=yourDomainName.com && export ADMIN_EMAIL=yourEmailAddress@someEmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
 
+# COMMAND 4 OF 4
 docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 
 # Now, access https://domain.com/healthcheck to see a JSON response
