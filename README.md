@@ -9,7 +9,9 @@ The CICD creates a temporary server which runs an ssh login into a remote server
 ## How to get it going, in short:
 
 ```bash
-# edit .env as needed, as well as the 3rd command below.
+# clone this repo.
+
+# edit .env to add your domain name (or remote server IP). You'll also need to edit the 3rd command below, to add your domain name (or remote server IP) and email address.
 
 # Don't forget to move into the ccc-nginx-certbot directory, which is where you'll run these commands from.
 
