@@ -1,6 +1,5 @@
 
 
-#Mar 17, 2024 – 07:51 pm
 #Try this instead:
 #https://serverfault.com/a/753155
 
@@ -14,10 +13,8 @@
 
 # Strapi server
 upstream strapi {
+    # if this doens't work, try the ip address.  if strapi container is on the same docker network as nginx (the web traffic router), the contianer name should work
     server ccc-strapi-dev:1337;
-    # server 127.0.0.1:1337;
-    # might need to be this:
-    # server ccc-strap-dev:1337;
 }
 
 server {

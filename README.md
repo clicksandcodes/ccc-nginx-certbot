@@ -38,7 +38,7 @@ docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/te
 # COMMAND 3 OF 4
 export NGINX_HOST=yourDomainName.com && export ADMIN_EMAIL=yourEmailAddress@someEmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
 
-# COMMAND 4 OF 4
+# COMMAND 4 OF 4 takes env var $NGINX_HOST and combines it with nginx conf template file (shared with the nginx server via volume property in docker-compose.yml) to and putputs the particular conf file the nginx server actually reads (into the conf.d directory)
 docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 
 # Now, access https://domain.com/healthcheck to see a JSON response

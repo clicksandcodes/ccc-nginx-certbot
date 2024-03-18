@@ -5,7 +5,7 @@ server {
     # How?
     # doc: https://serverfault.com/questions/577370/how-can-i-use-environment-variables-in-nginx-conf
 
-    server_name ${NGINX_HOST} www.${NGINX_HOST};
+    server_name ${NGINX_HOST} www.${NGINX_HOST} api.${NGINX_HOST};
 
     location /.well-known/acme-challenge/ {
         root /var/www/certbot;
