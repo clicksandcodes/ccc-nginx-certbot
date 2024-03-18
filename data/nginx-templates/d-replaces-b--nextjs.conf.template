@@ -8,6 +8,12 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
+
+    location /healthcheck {
+        default_type application/json;
+        return 200 '{"api_version":"0.0.1", "status_msg":"https_is_alive", "status_code":"200"}\n';
+    }
+
     location / {
         proxy_pass  http://ccc-nextjs-prod:3000;
     }

@@ -8,6 +8,10 @@ The CICD creates a temporary server which runs an ssh login into a remote server
 
 NOTE: I use this also for launching a subdomain for use with Strapi app-- more info in README-STRAPI.md
 
+For pushing changes to the server, I use rsync.
+It's useful because on the server, I run a command which downloads TLS certificates to the server. If I were to try to git pull new changes, git would require I stash those. Whereas this will simply upload any files which have been added or changes-- leaving alone any other files.
+`rsync -avvz . userName@IpAddress:~/ccc-nginx-certbot`
+
 ## How to get it going, in short:
 
 ```bash
