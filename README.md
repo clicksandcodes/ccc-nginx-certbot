@@ -30,7 +30,7 @@ docker-compose up
 
 # run these next 3 commands in a 2nd new ssh shell, in the ccc-nginx-certbot directory
 # COMMAND 2 OF 4
-docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
+docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 
 # Now, access http://domain.com/healthcheck to see a JSON response
 
@@ -39,7 +39,7 @@ docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/te
 export NGINX_HOST=yourDomainName.com && export ADMIN_EMAIL=yourEmailAddress@someEmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
 
 # COMMAND 4 OF 4 takes env var $NGINX_HOST and combines it with nginx conf template file (shared with the nginx server via volume property in docker-compose.yml) to and putputs the particular conf file the nginx server actually reads (into the conf.d directory)
-docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/b-https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 
 # Now, access https://domain.com/healthcheck to see a JSON response
 ```
@@ -52,7 +52,7 @@ docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/ngin
 
 ### Step 1: Setup a healthcheck endpoint for http traffic, as a prerequisite to requesting TLS certificates.
 
-> <span style="color:darkGreen; font-size: 1.1rem">In this step, we will pass environment variables to an nginx configuration template file (see it at ./data/nginx-templates/https-json-template.conf.template), in order to populate an nginx configuration... which is output into the Nginx docker container. From there, Nginx serves a JSON object at http://domain.com/healthcheck letting us know that the Nginx-routed server traffic is accessible.</span>
+> <span style="color:darkGreen; font-size: 1.1rem">In this step, we will pass environment variables to an nginx configuration template file (see it at ./data/nginx-templates/b-https-json-template.conf.template), in order to populate an nginx configuration... which is output into the Nginx docker container. From there, Nginx serves a JSON object at http://domain.com/healthcheck letting us know that the Nginx-routed server traffic is accessible.</span>
 
 - Clone this repo.
 
@@ -85,7 +85,7 @@ docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/ngin
   - Now nginx has access to a configuration file. The configuration file configures Nginx to serve a /healthcheck endpoint at domain or IP you specified as the "NGINX_HOST" in the .env file.
   - So, you'll be able to visit http://theDomainOrIP/healthcheck and see a JSON data object like this: `{ "api_version": "0.0.1", "status_msg": "http_is_alive", "status_code": "200" }` -- The purpose of which is simply to inform you that the nginx server can now support unsecured traffic to & from the public internet.
     - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run:**</span>
-    - `docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService`
+    - `docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService`
     - (Remember-- run that command in Terminal Window #2. Because we leave Terminal Window #1 as simply the window to show the docker container logs in real time)
     - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Open**</span> your browser or create an HTTP GET request to: http://theDomainOrIP/healthcheck
     - > Be sure it navigates to http:// and not http**s**://
@@ -106,11 +106,11 @@ docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/ngin
 
 ## Step 3: Setup an nginx https endpoint
 
-> <span style="color:darkGreen; font-size: 1.1rem">In this step, in a manner very similar to step #1, we run a docker command which will output a new nginx configuration file. How it works is... once again, it takes an environment variable ("NGINX_HOST") and combines it with a configuration template file (see it at ./data/nginx-templates/https-json-template.conf.template) in order to output an Nginx configuration file into the Nginx docker container. That configuration file will use the TLS certificates to host an https page of a basic html file at https://domain.com/ as well as a healthcheck endpoint at https://domain.com/healthcheck</span>
+> <span style="color:darkGreen; font-size: 1.1rem">In this step, in a manner very similar to step #1, we run a docker command which will output a new nginx configuration file. How it works is... once again, it takes an environment variable ("NGINX_HOST") and combines it with a configuration template file (see it at ./data/nginx-templates/b-https-json-template.conf.template) in order to output an Nginx configuration file into the Nginx docker container. That configuration file will use the TLS certificates to host an https page of a basic html file at https://domain.com/ as well as a healthcheck endpoint at https://domain.com/healthcheck</span>
 
 - The next step will do the aforementioned procedures, and then reload the nginx docker container.
 - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Command to run:**</span>
-- `docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService`
+- `docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/b-https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService`
 - <span style="color:blue; font-weight:bold; font-size: 1.5rem">**Open**</span> on a browser, or access via an HTTP GET Request the following domains:
   - https://domain.com/ - You'll see a very simply html page which says "Hello World, I am an https endpoint serving basic html"
   - https://domain.com/healthcheck - you'll see this JSON object: `{"api_version":"0.0.1", "status_msg":"https_is_alive", "status_code":"200"}`
@@ -156,11 +156,11 @@ I simply made this project public to demonstrate an example project I've been wo
 docker-compose up
 
 # run these in a 2nd new ssh shell, in the ccc-nginx-certbot directory
-docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
+docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 
 export NGINX_HOST=yourDomainName.com && export ADMIN_EMAIL=yourEmailAddress@someEmail.com && envsubst '\$NGINX_HOST \$ADMIN_EMAIL' < init-letsencrypt-template.sh > populated-init-letsencrypt.sh && chmod +x populated-init-letsencrypt.sh && sudo ./populated-init-letsencrypt.sh
 
-docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/b-https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 ```
 
 https://gist.github.com/maxivak/4706c87698d14e9de0918b6ea2a41015
@@ -198,7 +198,7 @@ See the codeblock below-- this is just a summary of the steps.
 
 - start the containers: `docker-compose up`
 - exec into the docker container of the nginx container: `docker exec -it nginx sh`
-- Run this: `envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
+- Run this: `envsubst '\$NGINX_HOST' < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf`
 - (Note: the specific env var (i.e. $NGINX_HOST) is specified above because it tells Nginx envsubst to only overwrite that particular env var, whick keeps intact others such as $host and $request_uri. More info: https://github.com/docker-library/docs/issues/496#issuecomment-186149231)
 - exit the container
 - restart it: `docker restart nginx`
@@ -206,10 +206,10 @@ See the codeblock below-- this is just a summary of the steps.
 ```shell
 # Run this line by line.
 docker exec -it nginx sh
-envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf
+envsubst < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf
 
 # OR combine the two above lines:
-docker exec nginxContainerService sh -c "envsubst < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
+docker exec nginxContainerService sh -c "envsubst < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 ```
 
 - check the domain (w/o https) via your browser and you should see the json response from the nginx server block
@@ -243,12 +243,12 @@ Run this line by line.
 ```shell
 # Run this line by line.
 docker exec -it nginx sh
-envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf
+envsubst '\$NGINX_HOST' < /etc/nginx/templates/b-https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf
 exit
 docker restart nginx
 
 # OR run them as one line:
-docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/b-https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 ```
 
 Back outside of the container:
@@ -333,7 +333,7 @@ docker-compose run --rm "\
 \***\*\_\_\_\_\*\*** Steps**\*\*\*\***\_**\*\*\*\***
 
 If you recreate the nginxContainerService but not the certbot one, the certs will still exist in the server's project directory. From there, they're automatically available to the nginx container via the docker volume (which is essentially a shared directory, synchronized between the linux server and the docker container) So, no need to re-reques them. Instead, just reload the templates into conf files with:
-docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/b-https-json-template.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
 
 \_**\_ For manual cert creation\_\_\_\_**
 docker exec certbotContainerService sh -c "\

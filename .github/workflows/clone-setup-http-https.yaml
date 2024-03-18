@@ -59,7 +59,7 @@ jobs:
           ssh dev "echo "##### 1A -- setup http""
           ssh dev "echo "##### Using docker exec to env var substitute command to insert env var of my domain name into nginx conf file -- via template file""
 
-          ssh dev "docker exec nginxContainerService sh -c \"envsubst '\$NGINX_HOST' < /etc/nginx/templates/http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf\" && docker restart nginxContainerService"
+          ssh dev "docker exec nginxContainerService sh -c \"envsubst '\$NGINX_HOST' < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf\" && docker restart nginxContainerService"
 
 
           ssh dev "echo ##### 1B -- Ping http"
@@ -84,47 +84,46 @@ jobs:
         #   exit 1
         # fi
     # ccc-nginx-certbot
-    # /data/nginx-templates/http-json-template.conf.template
-        # ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
+    # /data/nginx-templates/a-http-json-template.conf.template
+    # ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
 
-      # ssh dev "echo "##### Stop the existing docker containers -- nginx and certbot -- if they exist""
-      # ssh dev "docker stop nginxContainerService certbotContainerService && docker rm nginxContainerService certbotContainerService"
-      # - name: "Delete existing docker container.  If it doesnt exist, dont stop with an error message."
-      #   continue-on-error: true
-      #   run: |
-      #     ssh dev "docker stop nginxDockerContainer && docker rm nginxDockerContainer"
-      # - name: "Delete existing project directory If it doesnt exist, dont stop with an error message."
-      #   continue-on-error: true
-      #   run: |
-      #     ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
-      #     ssh dev "ls /home/$SSH_USER"
-      # - name: "Clone the project and setup the environment a bit"
-      #   run: |
-      #     ssh dev "echo We are in the step of feeding IP from GHA env var into the nginx conf file"
-      #     ssh dev "echo dev user email: $DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV"
-      #     ssh dev "cd /home/$SSH_USER"
-      #     ssh dev "echo pwd is $(pwd)"
-      #     ssh dev "echo clone the repo..."
-      #     ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
-      # ssh dev "touch ./ccc-nginx-certbot/.env"
-      # I dont need to place the IP into this file it needs to be the domain name
-      # the ip was during testing.  now we are beyond that. make it the domain name
-      # ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
-      # ssh dev "echo the IP for NGINX http json healthcheck Conf file of this commit is: $DEV_SERVER_IP_FROM_GHA_ENV"
+    # ssh dev "echo "##### Stop the existing docker containers -- nginx and certbot -- if they exist""
+    # ssh dev "docker stop nginxContainerService certbotContainerService && docker rm nginxContainerService certbotContainerService"
+    # - name: "Delete existing docker container.  If it doesnt exist, dont stop with an error message."
+    #   continue-on-error: true
+    #   run: |
+    #     ssh dev "docker stop nginxDockerContainer && docker rm nginxDockerContainer"
+    # - name: "Delete existing project directory If it doesnt exist, dont stop with an error message."
+    #   continue-on-error: true
+    #   run: |
+    #     ssh dev "sudo rm -rf /home/$SSH_USER/ccc-nginx-certbot"
+    #     ssh dev "ls /home/$SSH_USER"
+    # - name: "Clone the project and setup the environment a bit"
+    #   run: |
+    #     ssh dev "echo We are in the step of feeding IP from GHA env var into the nginx conf file"
+    #     ssh dev "echo dev user email: $DEV_USER_EMAIL_ADDRESS_FROM_GHA_ENV"
+    #     ssh dev "cd /home/$SSH_USER"
+    #     ssh dev "echo pwd is $(pwd)"
+    #     ssh dev "echo clone the repo..."
+    #     ssh dev "git clone git@github.com:clicksandcodes/ccc-nginx-certbot.git && docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
+    # ssh dev "touch ./ccc-nginx-certbot/.env"
+    # I dont need to place the IP into this file it needs to be the domain name
+    # the ip was during testing.  now we are beyond that. make it the domain name
+    # ssh dev "echo NGINX_HOST=$DEV_SERVER_IP_FROM_GHA_ENV >> ./ccc-nginx-certbot/.env"
+    # ssh dev "echo the IP for NGINX http json healthcheck Conf file of this commit is: $DEV_SERVER_IP_FROM_GHA_ENV"
 
-      # ssh dev "docker-compose -f /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot/docker-compose.yaml up -d"
-      # ssh dev "docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
-      # ssh dev "cd ./ccc-nginx-certbot; ls -lah ; pwd"
-      # ssh dev "ls -a"
-      # So instead of cd ... ls -a, do `cd ccc-nginx-certbot ; ls -lah ; pwd`
-      # also, try to keep it all in one step
-      #  OR... just run the commands at an absolute directory path
-      # - name: "Navigate to project directory"
-      #   working-directory: /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot
-      #   run: |
-      #     ssh dev "cd ccc-nginx-certbot"
-      #     ssh dev "ls -a"
-
+    # ssh dev "docker-compose -f /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot/docker-compose.yaml up -d"
+    # ssh dev "docker-compose -f ./ccc-nginx-certbot/docker-compose.yaml up -d"
+    # ssh dev "cd ./ccc-nginx-certbot; ls -lah ; pwd"
+    # ssh dev "ls -a"
+    # So instead of cd ... ls -a, do `cd ccc-nginx-certbot ; ls -lah ; pwd`
+    # also, try to keep it all in one step
+    #  OR... just run the commands at an absolute directory path
+    # - name: "Navigate to project directory"
+    #   working-directory: /home/runner/work/ccc-nginx-certbot/ccc-nginx-certbot
+    #   run: |
+    #     ssh dev "cd ccc-nginx-certbot"
+    #     ssh dev "ls -a"
 
   # job2_http_healthcheck_setup_and_ping:
   #   needs: job1_login_to_server_setup_environment
