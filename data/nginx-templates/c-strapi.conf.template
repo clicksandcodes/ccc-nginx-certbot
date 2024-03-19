@@ -1,3 +1,7 @@
+upstream strapi {
+    server ccc-strapi-dev:1337;
+    # server ccc-strapi-prod:1337;
+}
 
 server {
     listen 443 ssl;
@@ -12,7 +16,7 @@ server {
 
     # Proxy Config
     location / {
-        proxy_pass http://ccc-strapi-dev:1337;
+        proxy_pass http://strapi;
     }
 }
 

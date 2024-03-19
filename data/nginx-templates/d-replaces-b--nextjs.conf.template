@@ -1,3 +1,9 @@
+upstream nextjs {
+    # server ccc-nextjs-dev:3000;
+    server ccc-nextjs-prod:3000;
+}
+
+
 server {
     listen 443 ssl;
     server_name ${NGINX_HOST} www.${NGINX_HOST};
@@ -15,6 +21,6 @@ server {
     }
 
     location / {
-        proxy_pass  http://ccc-nextjs-prod:3000;
+        proxy_pass  http://nextjs;
     }
 }
