@@ -7,13 +7,13 @@ services:
       - ./.env
     image: nginx:1.15-alpine
     # restart: unless-stopped
-    restart: "no"
+    restart: unless-stopped
     volumes:
       # setting a shared volume with conf.d so we can easily add new configs to the nginxContainerService.
       - ./data/nginx-confd-volume:/etc/nginx/conf.d
       - ./data/nginx-templates:/etc/nginx/templates
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ../certbot/conf:/etc/letsencrypt
+      - ../certbot/www:/var/www/certbot
     ports:
       - "80:80"
       - "443:443"
@@ -22,6 +22,6 @@ services:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ../certbot/conf:/etc/letsencrypt
+      - ../certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot -vvv renew; sleep 12h & wait $${!}; done;'"
