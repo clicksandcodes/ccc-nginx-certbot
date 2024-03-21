@@ -28,4 +28,5 @@ That's what happens when we run this command:
 
 ```bash
 docker exec -it nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/d-replaces-b--nextjs.conf.template > /etc/nginx/conf.d/b-https-json-healthcheck.conf" && docker restart nginxContainerService
+
 ```

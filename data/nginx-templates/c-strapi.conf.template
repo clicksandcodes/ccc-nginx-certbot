@@ -1,6 +1,6 @@
 upstream strapi {
-    server ccc-strapi-dev:1337;
-    # server ccc-strapi-prod:1337;
+    #server ccc-strapi-dev:1337;
+    server ccc-strapi-prod:1337;
 }
 
 server {
@@ -12,7 +12,6 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-
 
     # Proxy Config
     location / {
