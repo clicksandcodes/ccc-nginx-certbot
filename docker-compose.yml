@@ -14,6 +14,7 @@ services:
       - ./data/nginx-templates:/etc/nginx/templates
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
+      - ./data/letsencrypt-generatedOnNginx:/etc/letsencrypt
     ports:
       - "80:80"
       - "443:443"
