@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  nginxProxyManagerContainerService:
+    image: "jc21/nginx-proxy-manager:latest"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "81:81"
+      - "443:443"
+    volumes:
+      # setting a shared volume with conf.d so we can easily add new configs to the nginxContainerService.
+      - ./data/nginx-confd-volume:/etc/nginx/conf.d
+      - ./data/nginx-templates:/etc/nginx/templates
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - ./data/letsencrypt-generatedOnNginx:/etc/letsencrypt
