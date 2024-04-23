@@ -33,7 +33,7 @@ docker-compose up
 docker exec nginxContainerService sh -c "envsubst '\$NGINX_HOST' < /etc/nginx/templates/a-http-json-template.conf.template > /etc/nginx/conf.d/a-http-json-healthcheck.conf" && docker restart nginxContainerService
 
 # Now, access http://domain.com/healthcheck to see a JSON response
-curl ttps://livestauction.com/healthcheck
+curl https://livestauction.com/healthcheck
 
 # Here, be sure to update NGINX_HOST & ADMIN_EMAIL to your variables-- your domain or remote server IP, and your email.
 # COMMAND 3 OF 4
