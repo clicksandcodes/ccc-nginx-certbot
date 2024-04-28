@@ -6,7 +6,7 @@ name: trying http and https endpoints
 on:
   push:
     branches:
-      - main
+      - not-active
       # - blah
 
 env:

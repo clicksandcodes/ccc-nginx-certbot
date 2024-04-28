@@ -1,5 +1,16 @@
 # Running containers
 
+Apr 28, 2024 – 02:07 pm
+Portfolio Project
+
+Going with the basic non-template ... by simply copying the template file into the conf file (no env var stuff)
+`docker exec -it nginxContainerService sh -c "cp /etc/nginx/templates/e-portfolio-http-get-certs.conf.template /etc/nginx/conf.d/e-portfolio-http-get-certs.conf" && docker restart nginxContainerService`
+
+Have not tried this yet: (not dealing with env vars yet until I get it running)
+`docker exec -it nginxContainerService sh -c "envsubst '\$HOSTNAME_PORTFOLIO' < /etc/nginx/templates/c-strapi.conf.template > /etc/nginx/conf.d/c-https-strapi-subdomain.conf" && docker restart nginxContainerService`
+
+---
+
 The below examples are for:
 
 - StrapiJS CMS (Content Management System)
