@@ -34,6 +34,10 @@ docker exec certbotContainerService sh -c "\
     --agree-tos \
     --force-renewal"
 
+ 
+docker exec certbotContainerService sh -c "\
+  certbot -vvv certonly --expand -d livestauction.com -d pmeaney.com -d www.pmeaney.com -d api.pmeaney.com"
+
 echo "### Reloading nginx ..."
 docker restart nginxContainerService
 

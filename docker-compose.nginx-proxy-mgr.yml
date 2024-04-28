@@ -10,3 +10,9 @@ services:
     volumes:
       - ./npm/data:/data
       - ./npm/letsencrypt:/etc/letsencrypt
+    networks:
+      - nginx-proxy-mgr-network
+
+networks:
+  nginx-proxy-mgr-network:
+    name: nginx-proxy-mgr-network

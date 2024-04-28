@@ -1,5 +1,7 @@
 # Running containers
 
+rsync -avvz . userDevOps4m_debian@143.198.156.31:~/ccc-nginx-certbot
+
 Apr 28, 2024 – 02:07 pm
 Portfolio Project
 

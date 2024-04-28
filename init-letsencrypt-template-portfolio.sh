@@ -12,6 +12,9 @@ curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/c
 
 curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "./data/certbot/conf/ssl-dhparams--portfolio.pem"
 
+docker exec -it nginxContainerService sh -c "cp /etc/nginx/templates/e-portfolio-http-get-certs.conf.template /etc/nginx/conf.d/e-portfolio-http-get-certs.conf" && docker restart nginxContainerService
+
+
 docker exec certbotContainerService sh -c "\
   certbot -vvv certonly --webroot -w /var/www/certbot \
     --email patrick.wm.meaney@gmail.com \

@@ -50,6 +50,12 @@ curl https://livestauction.com/
 
 ---
 
+### Other commands
+
+- Copy files from server to laptop: scp -r user@ip:/path/to/foo /home/user/Desktop/
+
+---
+
 ## Here's how to get it going, in detail.
 
 ### Below these instructions is a TLDR.
